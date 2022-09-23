@@ -1,0 +1,41 @@
+<nav class="navbar bg-transparent">
+  <div class="container">
+    <span class="navbar-brand mb-0 h1 ms-4 mb-2 p-auto"></span>
+    <ul class="nav">
+      <li class="nav-item mx-2 my-2 px-2 bg-danger rounded-4">
+        <a class="nav-link text-light" href="#">logout</a>
+      </li>
+      <!-- <li class="nav-item dropdown login-path me-3">Login</li> -->
+    </ul>
+  </div>
+</nav>
+<div class="container my-2">
+  <div class="row mb-2">
+    <div class="col-md mx-1 p-3 shadow bg-white rounded-1">
+      <div class="row my-auto">
+        <div class="col-md">
+          <p class="lead text-dark fs-5 my-0 text-center">Admin</p>
+          <p class="lead fs-5 my-0 text-center">GPIB Immanuel Malang</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-7 mx-1 p-3 shadow bg-white rounded-1">
+      <form id="form" action="/api/file" method="post">
+        <div class="mb-3">
+          <label for="files" class="form-label lead fs-6 visually-hidden">Upload Pdf</label>
+          <input type="file" class="form-control filepond" id="files" name="files" />
+        </div>
+        <div class="text-end">
+          <button type="submit" class="btn btn-warning">Submit</button>
+        </div>
+      </form>
+    </div>
+    <div class="col-md mx-1 px-3 py-4 shadow bg-white rounded-1">
+      <div class="row my-auto">
+        <div class="col-md">
+          <p class="lead fs-4 text-center my-auto greeting-text">Portal Whatsapp BOT</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -50,19 +50,13 @@ client.on('qr', (qr) => {
 
   QRCode.toDataURL(qr, (err, url) => {
     qrView = url;
-    console.log(qrView);
+    console.log('QR has been generated');
   });
 });
 
 //ROUTES
 app.use('/', indexRoute);
 app.use('/api/auth', authRoute);
-
-app.get('/barcode', (req, res) => {
-  res.render('qr', {
-    layout: 'layouts/main-layout',
-  });
-});
 
 app.get('/api/qr', (req, res) => {
   res.json({
