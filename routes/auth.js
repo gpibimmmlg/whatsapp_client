@@ -70,7 +70,7 @@ router.post('/login', async (req, res) => {
     //     token,
     //   },
     // });
-    res.redirect('/');
+    res.redirect('/barcode');
   } catch (err) {
     res.status(500).json({
       statusCode: 500,
