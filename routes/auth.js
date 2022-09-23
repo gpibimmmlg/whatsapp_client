@@ -59,17 +59,18 @@ router.post('/login', async (req, res) => {
     };
 
     // res.cookie('x-access-token', token, options);
-    res.json({
-      statusCode: 200,
-      status: 'Success',
-      message: {
-        id: user._id,
-        username: user.username,
-        createdAt: user.createdAt,
-        updatedAt: user.updatedAt,
-        token,
-      },
-    });
+    // res.json({
+    //   statusCode: 200,
+    //   status: 'Success',
+    //   message: {
+    //     id: user._id,
+    //     username: user.username,
+    //     createdAt: user.createdAt,
+    //     updatedAt: user.updatedAt,
+    //     token,
+    //   },
+    // });
+    res.redirect('/');
   } catch (err) {
     res.status(500).json({
       statusCode: 500,

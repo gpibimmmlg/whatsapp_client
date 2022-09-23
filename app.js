@@ -2,7 +2,8 @@ const express = require('express');
 const expressLayouts = require('express-ejs-layouts');
 const path = require('path');
 // const indexRoute = require('./routes/index.js');
-const qrcode = require('qrcode-terminal');
+// const qrcode = require('qrcode-terminal');
+const QRCode = require('qrcode');
 const { Client, MessageMedia, Buttons, LocalAuth, List } = require('whatsapp-web.js');
 const dotenv = require('dotenv');
 const mongoose = require('mongoose');
@@ -23,7 +24,7 @@ const app = express();
 const port = process.env.PORT || 3000;
 
 //MIDDLEWARES
-// app.use(expressLayouts);
+app.use(expressLayouts);
 app.use(express.json({ limit: '10mb' }));
 app.set('view engine', 'ejs');
 app.use(express.urlencoded({ limit: '10mb', extended: false }));
@@ -42,20 +43,35 @@ mongoose
     console.log(err);
   });
 
+let qrView;
 client.on('qr', (qr) => {
-  qrcode.generate(qr, { small: true });
+  // qrcode.generate(qr, { small: true });
+
+  QRCode.toDataURL(qr, (err, url) => {
+    qrView = url;
+    console.log(qrView);
+  });
 });
 
 //ROUTES
 app.use('/', indexRoute);
 app.use('/api/auth', authRoute);
 
-// client.on('authenticated', () => {
-//   console.log('AUTHENTICATED');
-// });
+app.get('/', (req, res) => {
+  res.render('qr', {
+    layout: 'layouts/main-layout',
+  });
+});
+
+app.get('/qr', (req, res) => {
+  res.json({
+    qrClient: qrView,
+  });
+});
 
 client.on('ready', () => {
   console.log('Client is ready!');
+  qrView = 'ready';
 });
 
 client.on('message', async (message) => {
