@@ -43,6 +43,7 @@ mongoose
     console.log(err);
   });
 
+//Generate WA QR
 let qrView;
 client.on('qr', (qr) => {
   // qrcode.generate(qr, { small: true });
@@ -57,18 +58,19 @@ client.on('qr', (qr) => {
 app.use('/', indexRoute);
 app.use('/api/auth', authRoute);
 
-app.get('/', (req, res) => {
+app.get('/barcode', (req, res) => {
   res.render('qr', {
     layout: 'layouts/main-layout',
   });
 });
 
-app.get('/qr', (req, res) => {
+app.get('/api/qr', (req, res) => {
   res.json({
     qrClient: qrView,
   });
 });
 
+//WHATSAPP BOT LOGIC
 client.on('ready', () => {
   console.log('Client is ready!');
   qrView = 'ready';
