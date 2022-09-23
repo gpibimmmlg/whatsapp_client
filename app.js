@@ -5,7 +5,11 @@ const path = require('path');
 const qrcode = require('qrcode-terminal');
 const { Client, MessageMedia, Buttons, LocalAuth, List } = require('whatsapp-web.js');
 const dotenv = require('dotenv');
+const mongoose = require('mongoose');
 dotenv.config();
+
+const authRoute = require('./routes/auth');
+const indexRoute = require('./routes/index');
 
 const client = new Client({
   // authStrategy: new LocalAuth(),
@@ -19,7 +23,7 @@ const app = express();
 const port = process.env.PORT || 3000;
 
 //MIDDLEWARES
-app.use(expressLayouts);
+// app.use(expressLayouts);
 app.use(express.json({ limit: '10mb' }));
 app.set('view engine', 'ejs');
 app.use(express.urlencoded({ limit: '10mb', extended: false }));
@@ -27,9 +31,24 @@ app.set('views', path.join(__dirname, 'views'));
 app.use(express.static(`${__dirname}/public`)); // make files able to access
 app.use('/public', express.static(path.join(__dirname, 'public')));
 
+// Mongodb Connect
+mongoose
+  .connect(process.env.MONGO_SECRET, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(console.log('connected to DB!'))
+  .catch((err) => {
+    console.log(err);
+  });
+
 client.on('qr', (qr) => {
   qrcode.generate(qr, { small: true });
 });
+
+//ROUTES
+app.use('/', indexRoute);
+app.use('/api/auth', authRoute);
 
 // client.on('authenticated', () => {
 //   console.log('AUTHENTICATED');
@@ -80,9 +99,6 @@ client.on('message', async (message) => {
     await client.sendMessage(message.from, buttons_reply_mulai);
   }
 });
-
-//ROUTES
-// app.use('/', indexRoute);
 
 client.initialize();
 
