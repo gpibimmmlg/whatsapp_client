@@ -7,6 +7,7 @@ const QRCode = require('qrcode');
 const { Client, MessageMedia, Buttons, LocalAuth, List } = require('whatsapp-web.js');
 const dotenv = require('dotenv');
 const mongoose = require('mongoose');
+const cookieParser = require('cookie-parser');
 dotenv.config();
 
 const authRoute = require('./routes/auth');
@@ -31,6 +32,7 @@ app.use(express.urlencoded({ limit: '10mb', extended: false }));
 app.set('views', path.join(__dirname, 'views'));
 app.use(express.static(`${__dirname}/public`)); // make files able to access
 app.use('/public', express.static(path.join(__dirname, 'public')));
+app.use(cookieParser());
 
 // Mongodb Connect
 mongoose

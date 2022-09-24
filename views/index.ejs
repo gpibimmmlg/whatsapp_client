@@ -1,8 +1,11 @@
 <nav class="navbar bg-transparent fixed-bottom">
   <span class="navbar-brand mb-0 h1 ms-4 mb-2 p-auto"></span>
   <ul class="nav">
+    <li class="nav-item mx-2 my-2 px-2 bg-warning rounded-4">
+      <a class="nav-link text-light fs-5" href="/barcode">Scan QR Code</a>
+    </li>
     <li class="nav-item mx-2 my-2 px-2 bg-danger rounded-4">
-      <a class="nav-link text-light fs-4" href="#">logout</a>
+      <a class="nav-link text-light fs-5" href="/api/auth/logout">Logout</a>
     </li>
   </ul>
 </nav>
@@ -11,14 +14,15 @@
     <div class="col-md mx-1 p-3 shadow bg-white rounded-1">
       <div class="row my-auto">
         <div class="col-md">
-          <p class="lead fs-3 my-0 text-center">Admin</p>
+          <p class="lead fs-5 my-0 text-end">Shalom, <span class="text-warning"><%= user %></span></p>
+          <p class="lead fs-5 my-0 text-end">Admin</p>
         </div>
       </div>
     </div>
     <div class="col-md-7 mx-1 p-3 shadow bg-white rounded-1">
       <div class="row my-auto">
         <div class="col-md text-center">
-          <p class="lead fs-2 mb-0 text-dark text-center">GPIB Immanuel Malang</p>
+          <p class="lead fs-2 mb-0 text-dark text-center">GPIB Immanuel <span class="text-warning">Malang</span></p>
         </div>
       </div>
     </div>
@@ -34,7 +38,7 @@
     <div class="col-md mx-1">
       <!-- Judul Kategori -->
       <div class="row">
-        <div class="col-md my-1 bg-white shadow">
+        <div class="col-md mt-2 mb-1 bg-white shadow">
           <p class="lead fs-5 p-2 mb-0">Arsip 1</p>
         </div>
       </div>
@@ -42,7 +46,7 @@
       <div class="row">
         <div class="col-md py-2 my-1 bg-white shadow">
           <form id="form" action="/api/file" method="post">
-            <div class="mb-3">
+            <div class="mb-4">
               <label for="files" class="form-label lead fs-6 visually-hidden">Upload Pdf</label>
               <input type="file" class="form-control filepond" id="files" name="files" style="font-size: 13px" />
             </div>
@@ -74,7 +78,7 @@
       <div class="row">
         <div class="col-md py-2 my-1 bg-white shadow">
           <form id="form" action="/api/file" method="post">
-            <div class="mb-3">
+            <div class="mb-4">
               <label for="files" class="form-label lead fs-6 visually-hidden">Upload Pdf</label>
               <input type="file" class="form-control filepond" id="files" name="files" style="font-size: 13px" />
             </div>
@@ -104,7 +108,7 @@
       <div class="row">
         <div class="col-md py-2 my-1 bg-white shadow">
           <form id="form" action="/api/file" method="post">
-            <div class="mb-3">
+            <div class="mb-4">
               <label for="files" class="form-label lead fs-6 visually-hidden">Upload Pdf</label>
               <input type="file" class="form-control filepond" id="files" name="files" style="font-size: 13px" />
             </div>
@@ -133,7 +137,7 @@
       <div class="row">
         <div class="col-md py-2 my-1 bg-white shadow">
           <form id="form" action="/api/file" method="post">
-            <div class="mb-3">
+            <div class="mb-4">
               <label for="files" class="form-label lead fs-6 visually-hidden">Upload Pdf</label>
               <input type="file" class="form-control filepond" id="files" name="files" style="font-size: 13px" />
             </div>
@@ -165,7 +169,7 @@
       <div class="row">
         <div class="col-md py-2 my-1 bg-white shadow">
           <form id="form" action="/api/file" method="post">
-            <div class="mb-3">
+            <div class="mb-4">
               <label for="files" class="form-label lead fs-6 visually-hidden">Upload Pdf</label>
               <input type="file" class="form-control filepond" id="files" name="files" style="font-size: 13px" />
             </div>

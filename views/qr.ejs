@@ -31,7 +31,7 @@
         if (data.qrClient === 'ready') {
           qrReady.innerHTML = '<p class="lead text-success fs-6">Whatsapp sudah terhubung</p><a type="button" href="/" class="btn btn-success">Lanjutkan</a>';
         } else if (qrReady.innerHTML != '<p class="lead text-success fs-6">Whatsapp sudah terhubung</p><button></button>') {
-          qrHtml.innerHTML = `<img src="${data.qrClient}" alt="barcode" />`;
+          qrHtml.innerHTML = `<img src="${data.qrClient}" alt="barcode" /></br><a type="button" href="/" class="btn btn-warning mt-2">Skip</a>`;
         }
       });
   }, 1000);

@@ -2,8 +2,9 @@ const router = require('express').Router();
 const User = require('../models/User');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const verify = require('./verifyToken');
 
-router.post('/register', async (req, res) => {
+router.post('/register', verify, async (req, res) => {
   const { username, password } = req.body;
   try {
     const salt = await bcrypt.genSalt(10);
@@ -58,7 +59,7 @@ router.post('/login', async (req, res) => {
       httpOnly: true, // The cookie only accessible by the web server
     };
 
-    // res.cookie('x-access-token', token, options);
+    res.cookie('x-access-token', token, options);
     // res.json({
     //   statusCode: 200,
     //   status: 'Success',
@@ -78,6 +79,12 @@ router.post('/login', async (req, res) => {
       message: 'Server Error',
     });
   }
+});
+
+//LOGOUT
+router.get('/logout', (req, res) => {
+  res.cookie('x-access-token', '', { maxAge: 1 });
+  res.redirect('/login');
 });
 
 module.exports = router;

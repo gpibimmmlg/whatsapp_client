@@ -1,8 +1,10 @@
 const router = require('express').Router();
+const verify = require('./verifyToken');
 
-router.get('/', (req, res) => {
+router.get('/', verify, (req, res) => {
   res.render('index', {
     layout: 'layouts/main-layout',
+    user: req.validUser.name,
   });
 });
 
@@ -12,7 +14,7 @@ router.get('/login', (req, res) => {
   });
 });
 
-router.get('/barcode', (req, res) => {
+router.get('/barcode', verify, (req, res) => {
   res.render('qr', {
     layout: 'layouts/main-layout',
   });
