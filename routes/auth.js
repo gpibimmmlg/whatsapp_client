@@ -31,20 +31,26 @@ router.post('/login', async (req, res) => {
     // Find the data by username
     const user = await User.findOne({ username });
     if (!user) {
-      return res.status(401).json({
-        statusCode: 401,
-        status: 'Unauthorized',
-        message: 'Wrong Credential',
+      return res.render('login', {
+        layout: 'layouts/main-layout',
+        title: 'Login',
+        message: {
+          statusCode: 401,
+          alert: 'Wrong username or password',
+        },
       });
     }
 
     // Chestatus: 'Success',ck whether password is correct or not
     const validPass = await bcrypt.compare(password, user.password);
     if (!validPass) {
-      return res.status(401).json({
-        statusCode: 401,
-        status: 'Unauthorized',
-        message: 'Wrong Credential',
+      return res.render('login', {
+        layout: 'layouts/main-layout',
+        title: 'Login',
+        message: {
+          statusCode: 401,
+          alert: 'Wrong username or password',
+        },
       });
     }
 

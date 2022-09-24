@@ -1,9 +1,15 @@
 <div class="container my-5">
   <div class="row">
     <div class="col-md-4 mx-auto p-3 shadow bg-light">
-      <p class="mt-2 lead text-dark fs-4">Layanan Whatsapp</p>
+      <p class="mt-2 mb-0 lead text-dark fs-4">Layanan Whatsapp</p>
       <p class="lead text-warning fs-4">GPIB Immanuel Malang</p>
       <form action="/api/auth/login" method="post">
+        <% if (message.alert) { %>
+        <div class="alert alert-dismissible alert-danger fade show mb-3">
+          <button type="button" class="btn-close" data-mdb-toggle="animation" data-mdb-animation="slide-right" data-mdb-animation-start="onLoad" data-bs-dismiss="alert"></button>
+          <strong>Oh no!</strong> <%= message.alert %>
+        </div>
+        <% } %>
         <div class="row">
           <div class="col-md lead text-dark">
             <div class="form-group">

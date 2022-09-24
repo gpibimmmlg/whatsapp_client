@@ -7,7 +7,10 @@ module.exports = function (req, res, next) {
     return res.render('login', {
       layout: 'layouts/main-layout',
       title: 'Login',
-      message: 'Please login first',
+      message: {
+        statusCode: 401,
+        alert: 'Please login first',
+      },
     }); // if there is no token
 
   jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
@@ -15,7 +18,10 @@ module.exports = function (req, res, next) {
       return res.render('login', {
         layout: 'layouts/main-layout',
         title: 'Login',
-        message: 'Please login first',
+        message: {
+          statusCode: 401,
+          alert: 'Please login first',
+        },
       });
     req.validUser = user;
     next();
