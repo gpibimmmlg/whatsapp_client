@@ -52,7 +52,6 @@ client.on('qr', (qr) => {
 
   QRCode.toDataURL(qr, (err, url) => {
     qrView = url;
-    console.log('QR has been generated');
   });
 });
 
@@ -73,7 +72,6 @@ client.on('ready', () => {
 });
 
 client.on('message', async (message) => {
-  console.log(message.from);
   const tanggal = '00/00/00';
   const periode = '00/00/00 - 00/00/00';
   const buttons_reply = new Buttons(
