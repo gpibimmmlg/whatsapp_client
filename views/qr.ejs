@@ -14,7 +14,7 @@
       <div class="row">
         <div class="col-md my-1">
           <p class="lead text-danger mb-0 fs-6">Barcode dapat berubah setiap saat</p>
-          <p class="lead text-dark fs-6">Scan kembali jika error.</p>
+          <p class="lead text-dark fs-6">Update Barcode jika error.</p>
         </div>
       </div>
     </div>
@@ -24,15 +24,25 @@
   const qrReady = document.querySelector('.qr-ready');
   const qrHtml = document.querySelector('#qrcode');
   qrHtml.innerHTML = '<div class="spinner-border" style="width: 3rem; height: 3rem" role="status"><span class="visually-hidden">Loading</span></div>';
-  setInterval(() => {
+
+  fetchQr();
+
+  const updateButton = document.querySelector('.update-button');
+  updateButton.addEventListener('click', () => {
+    qrHtml.innerHTML = '<div class="spinner-border" style="width: 3rem; height: 3rem" role="status"><span class="visually-hidden">Loading</span></div>';
+
+    fetchQr();
+  });
+
+  function fetchQr() {
     fetch('https://gpibimmanuelmalang.up.railway.app/api/qr')
       .then((response) => response.json())
       .then((data) => {
         if (data.qrClient === 'ready') {
           qrReady.innerHTML = '<p class="lead text-success fs-6">Whatsapp sudah terhubung</p><a type="button" href="/" class="btn btn-success">Lanjutkan</a>';
         } else if (qrReady.innerHTML != '<p class="lead text-success fs-6">Whatsapp sudah terhubung</p><button></button>') {
-          qrHtml.innerHTML = `<img src="${data.qrClient}" alt="barcode" /></br><a type="button" href="/" class="btn btn-warning mt-2">Skip</a>`;
+          qrHtml.innerHTML = `<img src="${data.qrClient}" alt="barcode" /></br><a type="button" href="/" class="btn btn-warning mt-2">Skip</a><br><button class="btn btn-success update-button">Update Barcode</button>`;
         }
       });
-  }, 1000);
+  }
 </script>
