@@ -88,47 +88,55 @@ client.on('message', async (message) => {
         await client.sendMessage(message.from, 'file tidak dikenal');
       }
     } else {
-      await client.sendMessage(message.from, 'Hai haloo');
+      await client.sendMessage(message.from, 'Masukkan Warta Jemaat, Tata Ibadah, atau Jadwal Ibadah dengan format yang sudah ditentukan.');
     }
   } else {
-    const tanggal = '00/00/00';
-    const periode = '00/00/00 - 00/00/00';
-    const buttons_reply = new Buttons(
-      `Ini adalah Layanan Whatsapp GPIB Immanuel Malang.\nAnda bisa mendapatkan dokumen Warta Jemaat dan Jadwal Ibadah PELKAT dengan menekan tombol di bawah.\nLayanan ini tersedia 24 jam.\n\n_Dokumen terbaru:_\n_Warta Jemaat: ${tanggal}_\n_Jadwal Ibadah: ${periode}_`,
-      [
-        { body: 'Warta Jemaat', id: 'test-1' },
-        { body: 'Jadwal Ibadah', id: 'test-2' },
-      ],
-      'SELAMAT DATANG!!!',
-      'Pilih dokumen yang anda inginkan'
-    ); // Reply button
+    await client.sendMessage(
+      message.from,
+      'SELAMAT DATANG di *Layanan Whatsapp _GPIB Immanuel Malang_*\nAnda dapat mengakses TATA IBADAH, WARTA JEMAAT, dan JADWAL IBADAH melalui Layanan Whatsapp ini.\nLayanan ini akan mulai beroperasi tanggal *22 Oktober 2022*\nTuhan Yesus memberkati.'
+    );
+    // const tanggal = '00/00/00';
+    // const periode = '00/00/00 - 00/00/00';
 
-    const buttons_reply_lainlain = new Buttons('GPIB Immanuel Malang juga dapat memberi anda dokumen-dokumen lainnya, seperti:', [
-      { body: 'Litbang', id: 'test-4' },
-      { body: 'Info', id: 'test-5' },
-      { body: 'Merchandise', id: 'test-6' },
-    ]); // Reply button
+    //  //REPLY PERTAMA
+    // const buttons_reply = new Buttons(
+    //   `Ini adalah Layanan Whatsapp GPIB Immanuel Malang.\nAnda bisa mendapatkan dokumen Warta Jemaat dan Jadwal Ibadah PELKAT dengan menekan tombol di bawah.\nLayanan ini tersedia 24 jam.\n\n_Dokumen terbaru:_\n_Warta Jemaat: ${tanggal}_\n_Jadwal Ibadah: ${periode}_`,
+    //   [
+    //     { body: 'Warta Jemaat', id: 'test-1' },
+    //     { body: 'Jadwal Ibadah', id: 'test-2' },
+    //   ],
+    //   'SELAMAT DATANG!!!',
+    //   'Pilih dokumen yang anda inginkan'
+    // ); // Reply button
 
-    const buttons_reply_mulai = new Buttons('Layanan ini sudah berakhir atau belum dimulai.', [{ body: 'Mulai', id: 'test-7' }], 'Layanan Whatsapp GPIB Immanuel Malang', 'Silahkan tekan tombol di bawah untuk memulai.'); // Reply button
+    //  // REPLY KEDUA
+    // const buttons_reply_lainlain = new Buttons('GPIB Immanuel Malang juga dapat memberi anda dokumen-dokumen lainnya, seperti:', [
+    //   { body: 'Litbang', id: 'test-4' },
+    //   { body: 'Info', id: 'test-5' },
+    //   { body: 'Merchandise', id: 'test-6' },
+    // ]); // Reply button
+
+    //  //OPENING
+    // const buttons_reply_mulai = new Buttons('Layanan ini sudah berakhir atau belum dimulai.', [{ body: 'Mulai', id: 'test-7' }], 'Layanan Whatsapp GPIB Immanuel Malang', 'Silahkan tekan tombol di bawah untuk memulai.'); // Reply button
 
     // const media = MessageMedia.fromFilePath('./public/pdf/warta_jemaat_minggu_tanggal.pdf');
 
-    if (message.body === 'Warta Jemaat') {
-      await client.sendMessage(message.from, 'Warta Jemaat belum ada');
-    } else if (message.body === 'Jadwal Ibadah') {
-      await client.sendMessage(message.from, 'Jadwal Ibadah belum ada.');
-    } else if (message.body === 'Litbang') {
-      await client.sendMessage(message.from, 'Litbang belum ada.');
-    } else if (message.body === 'Info') {
-      await client.sendMessage(message.from, 'Info belum ada.');
-    } else if (message.body === 'Merchandise') {
-      await client.sendMessage(message.from, 'Merchandise belum ada.');
-    } else if (message.body === 'Mulai') {
-      await client.sendMessage(message.from, buttons_reply);
-      await client.sendMessage(message.from, buttons_reply_lainlain);
-    } else {
-      await client.sendMessage(message.from, buttons_reply_mulai);
-    }
+    // if (message.body === 'Warta Jemaat') {
+    //   await client.sendMessage(message.from, 'Warta Jemaat belum ada');
+    // } else if (message.body === 'Jadwal Ibadah') {
+    //   await client.sendMessage(message.from, 'Jadwal Ibadah belum ada.');
+    // } else if (message.body === 'Litbang') {
+    //   await client.sendMessage(message.from, 'Litbang belum ada.');
+    // } else if (message.body === 'Info') {
+    //   await client.sendMessage(message.from, 'Info belum ada.');
+    // } else if (message.body === 'Merchandise') {
+    //   await client.sendMessage(message.from, 'Merchandise belum ada.');
+    // } else if (message.body === 'Mulai') {
+    //   await client.sendMessage(message.from, buttons_reply);
+    //   await client.sendMessage(message.from, buttons_reply_lainlain);
+    // } else {
+    //   await client.sendMessage(message.from, buttons_reply_mulai);
+    // }
   }
 });
 
