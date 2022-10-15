@@ -28,8 +28,8 @@
   fetchQr();
 
   function fetchQr() {
-    // fetch('https://gpibimmanuelmalangadminonly.up.railway.app/api/qr')
-    fetch('http://localhost:3000/api/qr')
+    // fetch('http://localhost:3000/api/qr')
+    fetch('https://gpibimmanuelmalangadminonly.up.railway.app/api/qr')
       .then((response) => response.json())
       .then((data) => {
         if (data.qrClient === 'ready') {
