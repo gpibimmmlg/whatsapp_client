@@ -118,7 +118,7 @@ client.on('message', async (message) => {
       );
     }
   } else {
-    await client.sendMessage(message.from, 'SELAMAT DATANG di \n*Layanan Whatsapp*\n*_GPIB Immanuel Malang_*\n\nLayanan ini akan mulai beroperasi tanggal *23 Oktober 2022*\nTuhan Yesus memberkati.');
+    await client.sendMessage(message.from, 'SELAMAT DATANG di \n*Layanan Whatsapp*\n*_GPIB Immanuel Malang_*\n\nLayanan ini akan mulai beroperasi tanggal *22 Oktober 2022.*\n\nTuhan Yesus memberkati.');
 
     // //FIND NEWEST WARTA & TATA
     // const warta = await Warta.find().sort({ createdAt: -1 });
