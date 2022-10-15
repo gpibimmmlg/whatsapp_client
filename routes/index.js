@@ -1,5 +1,5 @@
 const router = require('express').Router();
-// const verify = require('./verifyToken');
+const verify = require('./verifyToken');
 
 // router.get('/', verify, (req, res) => {
 //   res.render('index', {
@@ -11,16 +11,16 @@ const router = require('express').Router();
 //   });
 // });
 
-// router.get('/login', (req, res) => {
-//   res.render('login', {
-//     layout: 'layouts/main-layout',
-//     message: {
-//       statusCode: 200,
-//     },
-//   });
-// });
+router.get('/login', (req, res) => {
+  res.render('login', {
+    layout: 'layouts/main-layout',
+    message: {
+      statusCode: 200,
+    },
+  });
+});
 
-router.get('/barcode', (req, res) => {
+router.get('/barcode', verify, (req, res) => {
   res.render('qr', {
     layout: 'layouts/main-layout',
     message: {

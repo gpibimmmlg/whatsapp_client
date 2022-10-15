@@ -28,13 +28,14 @@
   fetchQr();
 
   function fetchQr() {
-    fetch('https://gpibimmanuelmalangadminonly.up.railway.app/api/qr')
+    // fetch('https://gpibimmanuelmalangadminonly.up.railway.app/api/qr')
+    fetch('http://localhost:3000/api/qr')
       .then((response) => response.json())
       .then((data) => {
         if (data.qrClient === 'ready') {
-          qrReady.innerHTML = '<p class="lead text-success fs-6">Whatsapp sudah terhubung</p>';
-        } else if (qrReady.innerHTML != '<p class="lead text-success fs-6">Whatsapp sudah terhubung</p><button></button>') {
-          qrHtml.innerHTML = `<img src="${data.qrClient}" alt="barcode" /></br><a type="button" href="/barcode" class="btn btn-success my-2 mt-2">Update Barcode / Confirm</a>`;
+          qrReady.innerHTML = '<p class="lead text-success fs-6">Whatsapp sudah terhubung</p><a type="button" href="/api/auth/logout" class="btn btn-danger my-2">Logout</a>';
+        } else {
+          qrHtml.innerHTML = `<img src="${data.qrClient}" alt="barcode" /></br><a type="button" href="/barcode" class="btn btn-success my-2">Update Barcode / Confirm</a><br><a type="button" href="/api/auth/logout" class="btn btn-danger my-2">Logout</a>`;
         }
       });
   }
