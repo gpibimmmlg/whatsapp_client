@@ -58,11 +58,11 @@ mongoose
 //Generate WA QR
 let qrView;
 client.on('qr', (qr) => {
-  // qrcode.generate(qr, { small: true });
+  qrcode.generate(qr, { small: true });
 
-  QRCode.toDataURL(qr, (err, url) => {
-    qrView = url;
-  });
+  // QRCode.toDataURL(qr, (err, url) => {
+  //   qrView = url;
+  // });
 });
 
 //ROUTES
@@ -286,6 +286,7 @@ client.on('message', async (message) => {
           await client.sendMessage(message.from, '*[PESAN OTOMATIS]*\nAnda BERHENTI berlangganan.\nTerima kasih, Tuhan Yesus memberkati.');
         }
       } else if (message.body.indexOf('Warta') != -1 || message.body.indexOf('warta') != -1) {
+        await client.sendMessage(message.from, '*[PESAN OTOMATIS]*\nSedang mengirim...\nHarap menunggu...');
         const warta = await Warta.find().sort({ createdAt: -1 });
         if (warta.length === 0) {
           await client.sendMessage(message.from, '*[PESAN OTOMATIS]*\nMohon maaf, Warta Jemaat belum ada.');
@@ -294,6 +295,7 @@ client.on('message', async (message) => {
           await client.sendMessage(message.from, media);
         }
       } else if (message.body.indexOf('Tata') != -1 || message.body.indexOf('tata') != -1) {
+        await client.sendMessage(message.from, '*[PESAN OTOMATIS]*\nSedang mengirim...\nHarap menunggu...');
         const tata = await Tata.find().sort({ createdAt: -1 });
         if (tata.length < 2) {
           await client.sendMessage(message.from, '*[PESAN OTOMATIS]*\nMohon maaf, Tata ibadah belum ada.');
@@ -304,31 +306,33 @@ client.on('message', async (message) => {
           await client.sendMessage(message.from, media2);
         }
       } else if (message.body.indexOf('Jadwal') != -1 || message.body.indexOf('jadwal') != -1) {
+        await client.sendMessage(message.from, '*[PESAN OTOMATIS]*\nSedang mengirim...\nHarap menunggu...');
         //LIHAT JADWAL
         const jadwal = await Jadwal.find().sort({ createdAt: -1 });
         const media = new MessageMedia(jadwal[0].dataType, jadwal[0].data);
         await client.sendMessage(message.from, media);
       } else if (message.body.indexOf('Mulai') != -1 || message.body.indexOf('mulai') != -1) {
         //FIND NEWEST WARTA & TATA
-        const warta = await Warta.find().sort({ createdAt: -1 });
-        const wartaNameArr = warta[0].dataName.split('');
-        let wartaDateArr = [];
-        for (let i = 13; i < 21; i++) {
-          wartaDateArr.push(wartaNameArr[i]);
-        }
-        const wartaDate = wartaDateArr.join('');
+        // const warta = await Warta.find().sort({ createdAt: -1 });
+
+        // const wartaNameArr = warta[0].dataName.split('');
+        // let wartaDateArr = [];
+        // for (let i = 13; i < 21; i++) {
+        //   wartaDateArr.push(wartaNameArr[i]);
+        // }
+        // const wartaDate = wartaDateArr.join('');
         // console.log(wartaDate);
 
-        const tata = await Tata.find().sort({ createdAt: -1 });
-        const tataNameArr = tata[0].dataName.split('');
-        let tataDateArr = [];
-        for (let i = 14; i < 22; i++) {
-          tataDateArr.push(tataNameArr[i]);
-        }
-        const tataDate = tataDateArr.join('');
+        // const tata = await Tata.find().sort({ createdAt: -1 });
+        // const tataNameArr = tata[0].dataName.split('');
+        // let tataDateArr = [];
+        // for (let i = 14; i < 22; i++) {
+        //   tataDateArr.push(tataNameArr[i]);
+        // }
+        // const tataDate = tataDateArr.join('');
         // console.log(tataDate);
         // console.log(warta);
-        const mulai = `*[PESAN OTOMATIS]*\nAnda bisa mendapatkan dokumen Warta Jemaat, Tata Ibadah, dan Jadwal Ibadah terbaru.\nDengan cara membalas pesan ini dengan kata kunci sebagai berikut.\n\n\n    *_Warta_* = untuk mendapatkan Warta Jemaat terbaru.\n\n    *_Tata_* = untuk mendapatkan Tata Ibadah terbaru.\n\n    *_Jadwal_* = untuk mendapatkan Jadwal Ibadah seminggu.\n\n\nDokumen yang tersedia:\n- Warta Jemaat tanggal ${wartaDate}\n- Tata Ibadah tanggal ${tataDate}\n\nLayanan ini tersedia 24 jam.`;
+        const mulai = `*[PESAN OTOMATIS]*\nAnda bisa mendapatkan dokumen Warta Jemaat, Tata Ibadah, dan Jadwal Ibadah terbaru.\nDengan cara membalas pesan ini dengan kata kunci sebagai berikut.\n\n\n    *_Warta_* = untuk mendapatkan Warta Jemaat terbaru.\n\n    *_Tata_* = untuk mendapatkan Tata Ibadah terbaru.\n\n    *_Jadwal_* = untuk mendapatkan Jadwal Ibadah seminggu.\n\n\nLayanan ini tersedia 24 jam.`;
         await client.sendMessage(message.from, mulai);
       } else {
         const opening =
@@ -336,7 +340,7 @@ client.on('message', async (message) => {
         await client.sendMessage(message.from, opening);
       }
     } catch (err) {
-      await client.sendMessage(message.from, 'Admin Server Error.');
+      await client.sendMessage(message.from, 'Client Server Error.');
     }
   }
 });
