@@ -58,11 +58,11 @@ mongoose
 //Generate WA QR
 let qrView;
 client.on('qr', (qr) => {
-  qrcode.generate(qr, { small: true });
+  // qrcode.generate(qr, { small: true });
 
-  // QRCode.toDataURL(qr, (err, url) => {
-  //   qrView = url;
-  // });
+  QRCode.toDataURL(qr, (err, url) => {
+    qrView = url;
+  });
 });
 
 //ROUTES
