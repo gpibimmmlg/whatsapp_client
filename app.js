@@ -304,6 +304,7 @@ client.on('message', async (message) => {
           await client.sendMessage(message.from, media2);
         }
       } else if (message.body.indexOf('Jadwal') != -1 || message.body.indexOf('jadwal') != -1) {
+        //LIHAT JADWAL
         const jadwal = await Jadwal.find().sort({ createdAt: -1 });
         const media = new MessageMedia(jadwal[0].dataType, jadwal[0].data);
         await client.sendMessage(message.from, media);
