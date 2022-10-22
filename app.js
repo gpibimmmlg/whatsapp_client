@@ -124,6 +124,7 @@ client.on('message', async (message) => {
           await newTeks.save();
           await client.sendMessage(message.from, 'teks diterima');
           // console.log(newTeks);
+          //update
         } else if (message.body.indexOf('!LihatTeks') === 0) {
           const teks = await Teks.find().sort({ createdAt: -1 });
           if (teks[0] === undefined) {
