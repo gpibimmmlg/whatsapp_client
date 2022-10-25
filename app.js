@@ -256,7 +256,7 @@ client.on('message', async (message) => {
       } else {
         await client.sendMessage(
           message.from,
-          'Kata kunci salah.\nKata Kunci:\n\n        !Teks\n        !LihatTeks\n        !LihatWarta\n        !LihatTata\n        !LihatJadwal\n        !BroadcastTeks\n        !BroadcastWarta\n        !BroadcastTata\n        !BroadcastJadwal\n        !JumlahSubscriber\n        !UpdateTanggal\n\nFormat nama file: \n_warta_jemaat_02-01-22_\n_tata_ibadah_19-05-22_\nJenis file:\nWarta Jemaat = _pdf_ (file document)\nTata Ibadah = _pdf_ (file document)\nJadwal Ibadah = _png_ / _jpg_ / _jpeg_ (langsung file foto/galeri)'
+          'Kata kunci salah.\nKata Kunci:\n\n        !Teks\n        !LihatTeks\n        !LihatWarta\n        !LihatTata\n        !LihatJadwal\n        !BroadcastTeks\n        !BroadcastWarta\n        !BroadcastTata\n        !BroadcastJadwal\n        !JumlahSubscriber\n        !UpdateTanggal\n\nFormat nama file: \n_warta_jemaat_02-01-22_\n_1_tata_ibadah_19-05-22_\nJenis file:\nWarta Jemaat = _pdf_ (file document)\nTata Ibadah = _pdf_ (file document)\nJadwal Ibadah = _png_ / _jpg_ / _jpeg_ (langsung file foto/galeri)'
         );
       }
     }
