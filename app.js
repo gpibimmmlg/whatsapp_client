@@ -23,8 +23,8 @@ const Teks = require('./models/Teks');
 const client = new Client({
   // authStrategy: new LocalAuth(),
   puppeteer: {
-    // args: ['--no-sandbox', '--disable-setuid-sandbox'],
-    headless: false,
+    args: ['--no-sandbox', '--disable-setuid-sandbox'],
+    // headless: false,
   },
   // puppeteer: { headless: false },
 });
