@@ -18,7 +18,7 @@
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.6.1",
     "qrcode": "^1.5.1",
-    "whatsapp-web.js": "github:pedroslopez/whatsapp-web.js#main"
+    "whatsapp-web.js": "github:pedroslopez/whatsapp-web.js#fix-buttons-list"
   },
   "devDependencies": {
     "dotenv": "^16.0.2",
