@@ -22,7 +22,7 @@ const Teks = require('./models/Teks');
 
 const client = new Client({
   // authStrategy: new LocalAuth(),
-  authStrategy: new LocalAuth(),
+  // authStrategy: new LocalAuth(),
   puppeteer: {
     args: ['--no-sandbox', '--disable-setuid-sandbox'],
     // headless: false,
@@ -73,11 +73,11 @@ let qrView;
 let tanggalWarta;
 let tanggalTata;
 client.on('qr', (qr) => {
-  // qrcode.generate(qr, { small: true });
+  qrcode.generate(qr, { small: true });
 
-  QRCode.toDataURL(qr, (err, url) => {
-    qrView = url;
-  });
+  // QRCode.toDataURL(qr, (err, url) => {
+  //   qrView = url;
+  // });
 });
 
 //ROUTES
