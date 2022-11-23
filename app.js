@@ -320,7 +320,7 @@ client.on('message', async (message) => {
         );
       }
     }
-  } else {
+  } else if (message.from != process.env.RESTRICTED_NUMBER) {
     //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
     //>>>>>>>>>>>>>>>>>> NON-BUTTON CODE <<<<<<<<<<<<<<<<<<<
     //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -419,6 +419,7 @@ client.on('message', async (message) => {
 
     if (message.body === 'Langganan') {
       await client.sendMessage(message.from, replyLoading);
+
       try {
         const subs = await Subs.findOne({ phone: message.from });
         if (subs) {
@@ -431,8 +432,13 @@ client.on('message', async (message) => {
       } catch (err) {
         await client.sendMessage(message.from, replyError);
       }
+
+      //CLEAR MESSAGES
+      const chat = await client.getChatById(message.from);
+      await chat.clearMessages();
     } else if (message.body === 'Berhenti Langganan') {
       await client.sendMessage(message.from, replyLoading);
+
       try {
         const subs = await Subs.findOne({ phone: message.from });
         if (!subs) {
@@ -444,8 +450,13 @@ client.on('message', async (message) => {
       } catch (err) {
         await client.sendMessage(message.from, replyError);
       }
+
+      //CLEAR MESSAGES
+      const chat = await client.getChatById(message.from);
+      await chat.clearMessages();
     } else if (message.body === 'Warta Jemaat') {
       await client.sendMessage(message.from, replyLoading);
+
       try {
         const warta = await Warta.find().sort({ createdAt: -1 });
         if (warta.length === 0) {
@@ -457,8 +468,13 @@ client.on('message', async (message) => {
       } catch (err) {
         await client.sendMessage(message.from, replyError);
       }
+
+      //CLEAR MESSAGES
+      const chat = await client.getChatById(message.from);
+      await chat.clearMessages();
     } else if (message.body === 'Tata Ibadah') {
       await client.sendMessage(message.from, replyLoading);
+
       try {
         const tata = await Tata.find().sort({ createdAt: -1 });
         if (tata.length < 2) {
@@ -472,8 +488,13 @@ client.on('message', async (message) => {
       } catch (err) {
         await client.sendMessage(message.from, replyError);
       }
+
+      //CLEAR MESSAGES
+      const chat = await client.getChatById(message.from);
+      await chat.clearMessages();
     } else if (message.body === 'Jadwal Ibadah') {
       await client.sendMessage(message.from, replyLoading);
+
       try {
         //LIHAT JADWAL
         const jadwal = await Jadwal.find().sort({ createdAt: -1 });
@@ -482,6 +503,10 @@ client.on('message', async (message) => {
       } catch (err) {
         await client.sendMessage(message.from, replyError);
       }
+
+      //CLEAR MESSAGES
+      const chat = await client.getChatById(message.from);
+      await chat.clearMessages();
     } else if (message.body === 'Mulai') {
       if (!tanggalWarta) {
         tanggalWarta = 'DD/MM/YY';
@@ -503,6 +528,10 @@ client.on('message', async (message) => {
       ); // Reply button
 
       await client.sendMessage(message.from, buttons_reply_mulai);
+
+      //CLEAR MESSAGES
+      const chat = await client.getChatById(message.from);
+      await chat.clearMessages();
     } else {
       //REPLY PERTAMA
       const buttons_reply = new Buttons(
@@ -517,6 +546,10 @@ client.on('message', async (message) => {
       ); // Reply button
 
       await client.sendMessage(message.from, buttons_reply);
+
+      //CLEAR MESSAGES
+      const chat = await client.getChatById(message.from);
+      await chat.clearMessages();
     }
 
     //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
