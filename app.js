@@ -501,9 +501,9 @@ client.on('message', async (message) => {
         await client.sendMessage(message.from, replyError);
       }
 
-      // //CLEAR MESSAGES
-      // const chat = await client.getChatById(message.from);
-      // await chat.clearMessages();
+      //CLEAR MESSAGES
+      const chat = await client.getChatById(message.from);
+      await chat.clearMessages();
     } else if (message.body === 'Berhenti Langganan') {
       await client.sendMessage(message.from, replyLoading);
 
@@ -519,9 +519,9 @@ client.on('message', async (message) => {
         await client.sendMessage(message.from, replyError);
       }
 
-      // //CLEAR MESSAGES
-      // const chat = await client.getChatById(message.from);
-      // await chat.clearMessages();
+      //CLEAR MESSAGES
+      const chat = await client.getChatById(message.from);
+      await chat.clearMessages();
     } else if (message.body === 'Warta Jemaat') {
       try {
         //REPLY PERTAMA
@@ -538,9 +538,9 @@ client.on('message', async (message) => {
 
         await client.sendMessage(message.from, buttons_reply_warta);
 
-        // //CLEAR MESSAGES
-        // const chat = await client.getChatById(message.from);
-        // await chat.clearMessages();
+        //CLEAR MESSAGES
+        const chat = await client.getChatById(message.from);
+        await chat.clearMessages();
       } catch (err) {
         await client.sendMessage(message.from, replyError);
       }
@@ -582,9 +582,9 @@ client.on('message', async (message) => {
         await client.sendMessage(message.from, replyError);
       }
 
-      // //CLEAR MESSAGES
-      // const chat = await client.getChatById(message.from);
-      // await chat.clearMessages();
+      //CLEAR MESSAGES
+      const chat = await client.getChatById(message.from);
+      await chat.clearMessages();
     } else if (message.body === 'Jadwal Ibadah') {
       await client.sendMessage(message.from, replyLoading);
 
@@ -602,9 +602,9 @@ client.on('message', async (message) => {
         await client.sendMessage(message.from, replyError);
       }
 
-      // //CLEAR MESSAGES
-      // const chat = await client.getChatById(message.from);
-      // await chat.clearMessages();
+      //CLEAR MESSAGES
+      const chat = await client.getChatById(message.from);
+      await chat.clearMessages();
     } else if (message.body === 'Mulai') {
       if (!tanggalWarta) {
         tanggalWarta = 'DD/MM/YY';
@@ -627,9 +627,9 @@ client.on('message', async (message) => {
 
       await client.sendMessage(message.from, buttons_reply_mulai);
 
-      // //CLEAR MESSAGES
-      // const chat = await client.getChatById(message.from);
-      // await chat.clearMessages();
+      //CLEAR MESSAGES
+      const chat = await client.getChatById(message.from);
+      await chat.clearMessages();
     } else if (message.body === 'Warta Immanuel') {
       await client.sendMessage(message.from, replyLoading);
       try {
@@ -645,9 +645,9 @@ client.on('message', async (message) => {
       } catch (err) {
         await client.sendMessage(message.from, replyError);
       }
-      // //CLEAR MESSAGES
-      // const chat = await client.getChatById(message.from);
-      // await chat.clearMessages();
+      //CLEAR MESSAGES
+      const chat = await client.getChatById(message.from);
+      await chat.clearMessages();
     } else if (message.body === 'Laporan Keuangan') {
       await client.sendMessage(message.from, replyLoading);
       try {
@@ -663,9 +663,9 @@ client.on('message', async (message) => {
       } catch (err) {
         await client.sendMessage(message.from, replyError);
       }
-      // //CLEAR MESSAGES
-      // const chat = await client.getChatById(message.from);
-      // await chat.clearMessages();
+      //CLEAR MESSAGES
+      const chat = await client.getChatById(message.from);
+      await chat.clearMessages();
     } else if (message.body === 'Pelayan, Bacaan & Nyanyian') {
       await client.sendMessage(message.from, replyLoading);
       try {
@@ -681,9 +681,9 @@ client.on('message', async (message) => {
       } catch (err) {
         await client.sendMessage(message.from, replyError);
       }
-      // //CLEAR MESSAGES
-      // const chat = await client.getChatById(message.from);
-      // await chat.clearMessages();
+      //CLEAR MESSAGES
+      const chat = await client.getChatById(message.from);
+      await chat.clearMessages();
     } else {
       //REPLY PERTAMA
       const buttons_reply = new Buttons(
@@ -699,9 +699,9 @@ client.on('message', async (message) => {
 
       await client.sendMessage(message.from, buttons_reply);
 
-      // //CLEAR MESSAGES
-      // const chat = await client.getChatById(message.from);
-      // await chat.clearMessages();
+      //CLEAR MESSAGES
+      const chat = await client.getChatById(message.from);
+      await chat.clearMessages();
     }
 
     //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
