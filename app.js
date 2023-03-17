@@ -62,11 +62,7 @@ app.use(cookieParser());
 
 const connectDB = async () => {
   try {
-    await mongoose.connect(
-      'mongodb://danieldwipaska:Mikel098@ac-gvjyiwc-shard-00-00.yogu1pi.mongodb.net:27017,ac-gvjyiwc-shard-00-01.yogu1pi.mongodb.net:27017,ac-gvjyiwc-shard-00-02.yogu1pi.mongodb.net:27017/gpibImmanuelMalangWhatsapp?ssl=true&replicaSet=atlas-n9uatz-shard-0&authSource=admin&retryWrites=true&w=majority',
-      { useNewUrlParser: true, useUnifiedTopology: true }
-    );
-
+    await mongoose.connect(process.env.MONGO_SECRET, { useNewUrlParser: true, useUnifiedTopology: true });
     console.log('MongoDB connected!!');
   } catch (err) {
     console.log('Failed to connect to MongoDB', err);
