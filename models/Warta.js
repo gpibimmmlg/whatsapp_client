@@ -7,7 +7,7 @@ const WartaSchema = new mongoose.Schema(
       required: true,
     },
     data: {
-      type: String,
+      type: Buffer,
       required: true,
     },
     dataName: {

@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const JadwalSchema = new mongoose.Schema(
+const KeuanganSchema = new mongoose.Schema(
   {
     dataType: {
       type: String,
@@ -18,4 +18,4 @@ const JadwalSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-module.exports = mongoose.model('Jadwal', JadwalSchema);
+module.exports = mongoose.model('Keuangan', KeuanganSchema);
