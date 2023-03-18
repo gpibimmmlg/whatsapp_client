@@ -7,7 +7,7 @@ const ImmanuelSchema = new mongoose.Schema(
       required: true,
     },
     data: {
-      type: Buffer,
+      type: String,
       required: true,
     },
     dataName: {

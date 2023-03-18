@@ -122,9 +122,9 @@ client.on('message', async (message) => {
       if (mediaReceived.filename.indexOf('1_tata_ibadah') === 0 || mediaReceived.filename.indexOf('2_tata_ibadah') === 0) {
         await client.sendMessage(message.from, replyLoading);
         try {
-          const dataBuf = Buffer.from(mediaReceived.data, 'base64');
+          // const dataBuf = Buffer.from(mediaReceived.data, 'base64');
           //SIMPAN TATA IBADAH KE DB
-          const newTata = new Tata({ dataType: mediaReceived.mimetype, data: dataBuf, dataName: mediaReceived.filename });
+          const newTata = new Tata({ dataType: mediaReceived.mimetype, data: mediaReceived.data, dataName: mediaReceived.filename });
           await newTata.save();
 
           //REPLY TO ADMIN
@@ -135,9 +135,9 @@ client.on('message', async (message) => {
       } else if (mediaReceived.mimetype === 'image/png' || mediaReceived.mimetype === 'image/jpeg' || mediaReceived.mimetype === 'image/jpg') {
         await client.sendMessage(message.from, replyLoading);
         try {
-          const dataBuf = Buffer.from(mediaReceived.data, 'base64');
+          // const dataBuf = Buffer.from(mediaReceived.data, 'base64');
           //SIMPAN WARTA JEMAAT KE DB
-          const newJadwal = new Jadwal({ dataType: mediaReceived.mimetype, data: dataBuf, dataName: mediaReceived.filename });
+          const newJadwal = new Jadwal({ dataType: mediaReceived.mimetype, data: mediaReceived.data, dataName: mediaReceived.filename });
           await newJadwal.save();
 
           //REPLY TO ADMIN
@@ -148,9 +148,9 @@ client.on('message', async (message) => {
       } else if (mediaReceived.filename.indexOf('warta_immanuel') === 0) {
         await client.sendMessage(message.from, replyLoading);
         try {
-          const dataBuf = Buffer.from(mediaReceived.data, 'base64');
+          // const dataBuf = Buffer.from(mediaReceived.data, 'base64');
           //SIMPAN WARTA JEMAAT KE DB
-          const newImm = new Immanuel({ dataType: mediaReceived.mimetype, data: dataBuf, dataName: mediaReceived.filename });
+          const newImm = new Immanuel({ dataType: mediaReceived.mimetype, data: mediaReceived.data, dataName: mediaReceived.filename });
           await newImm.save();
 
           //REPLY TO ADMIN
@@ -161,9 +161,9 @@ client.on('message', async (message) => {
       } else if (mediaReceived.filename.indexOf('laporan_keuangan') === 0) {
         await client.sendMessage(message.from, replyLoading);
         try {
-          const dataBuf = Buffer.from(mediaReceived.data, 'base64');
+          // const dataBuf = Buffer.from(mediaReceived.data, 'base64');
           //SIMPAN WARTA JEMAAT KE DB
-          const newKeuangan = new Keuangan({ dataType: mediaReceived.mimetype, data: dataBuf, dataName: mediaReceived.filename });
+          const newKeuangan = new Keuangan({ dataType: mediaReceived.mimetype, data: mediaReceived.data, dataName: mediaReceived.filename });
           await newKeuangan.save();
 
           //REPLY TO ADMIN
@@ -174,9 +174,9 @@ client.on('message', async (message) => {
       } else if (mediaReceived.filename.indexOf('liturgi_pelayan') === 0) {
         await client.sendMessage(message.from, replyLoading);
         try {
-          const dataBuf = Buffer.from(mediaReceived.data, 'base64');
+          // const dataBuf = Buffer.from(mediaReceived.data, 'base64');
           //SIMPAN WARTA JEMAAT KE DB
-          const newTeologi = new Teologi({ dataType: mediaReceived.mimetype, data: dataBuf, dataName: mediaReceived.filename });
+          const newTeologi = new Teologi({ dataType: mediaReceived.mimetype, data: mediaReceived.data, dataName: mediaReceived.filename });
           await newTeologi.save();
 
           //REPLY TO ADMIN
@@ -225,8 +225,8 @@ client.on('message', async (message) => {
           if (immanuel[0] === undefined) {
             await client.sendMessage(message.from, 'warta immanuel belum ada');
           } else {
-            const dataString = immanuel[0].data.toString('base64');
-            const media = new MessageMedia(immanuel[0].dataType, dataString, immanuel[0].dataName);
+            // const dataString = immanuel[0].data.toString('base64');
+            const media = new MessageMedia(immanuel[0].dataType, immanuel[0].data, immanuel[0].dataName);
             await client.sendMessage(message.from, media);
           }
         } catch (err) {
@@ -239,8 +239,8 @@ client.on('message', async (message) => {
           if (keuangan[0] === undefined) {
             await client.sendMessage(message.from, 'laporan keuangan belum ada');
           } else {
-            const dataString = keuangan[0].data.toString('base64');
-            const media = new MessageMedia(keuangan[0].dataType, dataString, keuangan[0].dataName);
+            // const dataString = keuangan[0].data.toString('base64');
+            const media = new MessageMedia(keuangan[0].dataType, keuangan[0], keuangan[0].dataName);
             await client.sendMessage(message.from, media);
           }
         } catch (err) {
@@ -253,8 +253,8 @@ client.on('message', async (message) => {
           if (teologi[0] === undefined) {
             await client.sendMessage(message.from, 'liturgi pelayan belum ada');
           } else {
-            const dataString = teologi[0].data.toString('base64');
-            const media = new MessageMedia(teologi[0].dataType, dataString, teologi[0].dataName);
+            // const dataString = teologi[0].data.toString('base64');
+            const media = new MessageMedia(teologi[0].dataType, teologi[0].data, teologi[0].dataName);
             await client.sendMessage(message.from, media);
           }
         } catch (err) {
@@ -267,10 +267,10 @@ client.on('message', async (message) => {
           if (tata[1] === undefined) {
             await client.sendMessage(message.from, 'tata ibadah belum ada atau cuma satu.');
           } else {
-            const dataString0 = tata[0].data.toString('base64');
-            const dataString1 = tata[1].data.toString('base64');
-            const media1 = new MessageMedia(tata[0].dataType, dataString0, tata[0].dataName);
-            const media2 = new MessageMedia(tata[1].dataType, dataString1, tata[1].dataName);
+            // const dataString0 = tata[0].data.toString('base64');
+            // const dataString1 = tata[1].data.toString('base64');
+            const media1 = new MessageMedia(tata[0].dataType, tata[0].data, tata[0].dataName);
+            const media2 = new MessageMedia(tata[1].dataType, tata[1].data, tata[1].dataName);
             await client.sendMessage(message.from, media1);
             await client.sendMessage(message.from, media2);
           }
@@ -284,8 +284,8 @@ client.on('message', async (message) => {
           if (jadwal[0] === undefined) {
             await client.sendMessage(message.from, 'jadwal belum ada');
           } else {
-            const dataString = jadwal[0].data.toString('base64');
-            const media = new MessageMedia(jadwal[0].dataType, dataString, jadwal[0].dataName);
+            // const dataString = jadwal[0].data.toString('base64');
+            const media = new MessageMedia(jadwal[0].dataType, jadwal[0].data, jadwal[0].dataName);
             await client.sendMessage(message.from, media);
           }
         } catch (err) {
@@ -303,63 +303,6 @@ client.on('message', async (message) => {
               await client.sendMessage(subses[i].phone, teks[0].content);
             }
             await client.sendMessage(message.from, 'Teks terkirim.');
-          }
-        } catch (err) {
-          await client.sendMessage(message.from, replyError);
-        }
-      } else if (message.body.indexOf('!BroadcastWarta') === 0) {
-        await client.sendMessage(message.from, replyLoading);
-        try {
-          const warta = await Warta.find().sort({ createdAt: -1 });
-          if (warta[0] === undefined) {
-            await client.sendMessage(message.from, 'warta jemaat belum ada');
-          } else {
-            const dataString = warta[0].data.toString('base64');
-            const media = new MessageMedia(warta[0].dataType, dataString, warta[0].dataName);
-            const subses = await Subs.find();
-            for (let i = 0; i < subses.length; i++) {
-              await client.sendMessage(subses[i].phone, media);
-            }
-            await client.sendMessage(message.from, 'Warta terkirim.');
-          }
-        } catch (err) {
-          await client.sendMessage(message.from, replyError);
-        }
-      } else if (message.body.indexOf('!BroadcastTata') === 0) {
-        await client.sendMessage(message.from, replyLoading);
-        try {
-          const tata = await Tata.find().sort({ createdAt: -1 });
-          if (tata[0] === undefined) {
-            await client.sendMessage(message.from, 'tata ibadah belum ada');
-          } else {
-            const dataString0 = tata[0].data.toString('base64');
-            const dataString1 = tata[1].data.toString('base64');
-            const media1 = new MessageMedia(tata[0].dataType, dataString0, tata[0].dataName);
-            const media2 = new MessageMedia(tata[1].dataType, dataString1, tata[1].dataName);
-            const subses = await Subs.find();
-            for (let i = 0; i < subses.length; i++) {
-              await client.sendMessage(subses[i].phone, media1);
-              await client.sendMessage(subses[i].phone, media2);
-            }
-            await client.sendMessage(message.from, 'Tata terkirim.');
-          }
-        } catch (err) {
-          await client.sendMessage(message.from, replyError);
-        }
-      } else if (message.body.indexOf('!BroadcastJadwal') === 0) {
-        await client.sendMessage(message.from, replyLoading);
-        try {
-          const jadwal = await Jadwal.find().sort({ createdAt: -1 });
-          if (jadwal[0] === undefined) {
-            await client.sendMessage(message.from, 'jadwal ibadah belum ada');
-          } else {
-            const dataString = jadwal[0].data.toString('base64');
-            const media = new MessageMedia(jadwal[0].dataType, dataString, jadwal[0].dataName);
-            const subses = await Subs.find();
-            for (let i = 0; i < subses.length; i++) {
-              await client.sendMessage(subses[i].phone, media);
-            }
-            await client.sendMessage(message.from, 'Jadwal terkirim.');
           }
         } catch (err) {
           await client.sendMessage(message.from, replyError);
@@ -384,7 +327,7 @@ client.on('message', async (message) => {
       } else {
         await client.sendMessage(
           message.from,
-          'Kata kunci salah.\nKata Kunci:\n\n        !Teks\n        !LihatTeks\n        !LihatWarta\n        !LihatTata\n        !LihatJadwal\n        !BroadcastTeks\n        !BroadcastWarta\n        !BroadcastTata\n        !BroadcastJadwal\n        !JumlahSubscriber\n        !UpdateTanggal\n\nFormat nama file: \n_1_tata_ibadah_19-05-22_\n_warta_immanuel_27-10-23_\n_laporan_keuangan_17-01-23_\n_liturgi_pelayan_06-12-23_\nJenis file:\nWarta Jemaat = _pdf_ (file document)\nTata Ibadah = _pdf_ (file document)\nJadwal Ibadah = _png_ / _jpg_ / _jpeg_ (langsung file foto/galeri)\nWarta Immanuel = _pdf_ (file document)\nLaporan Keuangan = _pdf_ (file document)\nLiturgi Pelayan = _pdf_ (file document)'
+          'Kata kunci salah.\nKata Kunci:\n\n        !Teks\n        !LihatTeks\n        !LihatWarta\n        !LihatTata\n        !LihatJadwal\n        !BroadcastTeks\n        !JumlahSubscriber\n\nFormat nama file: \n_1_tata_ibadah_19-05-22_\n_warta_immanuel_27-10-23_\n_laporan_keuangan_17-01-23_\n_liturgi_pelayan_06-12-23_\nJenis file:\nTata Ibadah = _pdf_ (file document)\nJadwal Ibadah = _png_ / _jpg_ / _jpeg_ (langsung file foto/galeri)\nWarta Immanuel = _pdf_ (file document)\nLaporan Keuangan = _pdf_ (file document)\nLiturgi Pelayan = _pdf_ (file document)'
         );
       }
     }
@@ -571,12 +514,13 @@ client.on('message', async (message) => {
         if (tata.length < 2) {
           await client.sendMessage(message.from, '*[PESAN OTOMATIS]*\nMohon maaf, Tata ibadah belum ada.');
         } else {
-          const dataString0 = tata[0].data.toString('base64');
-          const dataString1 = tata[1].data.toString('base64');
-          const media1 = new MessageMedia(tata[0].dataType, dataString0, tata[0].dataName);
-          const media2 = new MessageMedia(tata[1].dataType, dataString1, tata[1].dataName);
+          // const dataString0 = tata[0].data.toString('base64');
+          // const dataString1 = tata[1].data.toString('base64');
+          const media1 = new MessageMedia(tata[0].dataType, tata[0].data, tata[0].dataName);
+          const media2 = new MessageMedia(tata[1].dataType, tata[1].data, tata[1].dataName);
           await client.sendMessage(message.from, media1);
           await client.sendMessage(message.from, media2);
+          await client.sendMessage(message.from, replyClosing);
         }
       } catch (err) {
         await client.sendMessage(message.from, replyError);
@@ -594,9 +538,10 @@ client.on('message', async (message) => {
         if (jadwal.length === 0) {
           await client.sendMessage(message.from, '*[PESAN OTOMATIS]*\nMohon maaf, jadwal ibadah belum ada.');
         } else {
-          const dataString = jadwal[0].data.toString('base64');
-          const media = new MessageMedia(jadwal[0].dataType, dataString);
+          // const dataString = jadwal[0].data.toString('base64');
+          const media = new MessageMedia(jadwal[0].dataType, jadwal[0].data);
           await client.sendMessage(message.from, media);
+          await client.sendMessage(message.from, replyClosing);
         }
       } catch (err) {
         await client.sendMessage(message.from, replyError);
@@ -606,16 +551,16 @@ client.on('message', async (message) => {
       const chat = await client.getChatById(message.from);
       await chat.clearMessages();
     } else if (message.body === 'Mulai') {
-      if (!tanggalWarta) {
-        tanggalWarta = 'DD/MM/YY';
-      }
-      if (!tanggalTata) {
-        tanggalTata = 'DD/MM/YY';
-      }
+      // if (!tanggalWarta) {
+      //   tanggalWarta = 'DD/MM/YY';
+      // }
+      // if (!tanggalTata) {
+      //   tanggalTata = 'DD/MM/YY';
+      // }
 
       //REPLY KEDUA
       const buttons_reply_mulai = new Buttons(
-        `di Layanan Whatsapp\nGPIB Immanuel Malang.\n\nAnda bisa mendapatkan dokumen Warta Jemaat, Tata Ibadah Minggu dan Jadwal Ibadah Sepekan dengan menekan tombol di bawah.\nLayanan ini tersedia 24 jam.\n\n_Dokumen yang tersedia:_\n_Warta Jemaat: ${tanggalWarta}_\n_Tata Ibadah: ${tanggalTata}_`,
+        `di Layanan Whatsapp\nGPIB Immanuel Malang.\n\nAnda bisa mendapatkan dokumen Warta Jemaat, Tata Ibadah Minggu dan Jadwal Ibadah Sepekan dengan menekan tombol di bawah.\nLayanan ini tersedia 24 jam.`,
         [
           { body: 'Warta Jemaat', id: 'test-1' },
           { body: 'Tata Ibadah', id: 'test-2' },
@@ -637,8 +582,8 @@ client.on('message', async (message) => {
         if (immanuel.length === 0) {
           await client.sendMessage(message.from, '*[PESAN OTOMATIS]*\nMohon maaf, Warta Immanuel belum ada.');
         } else {
-          const dataString = immanuel[0].data.toString('base64');
-          const media = new MessageMedia(immanuel[0].dataType, dataString, immanuel[0].dataName);
+          // const dataString = immanuel[0].data.toString('base64');
+          const media = new MessageMedia(immanuel[0].dataType, immanuel[0].data, immanuel[0].dataName);
           await client.sendMessage(message.from, media);
           await client.sendMessage(message.from, replyClosing);
         }
@@ -655,8 +600,8 @@ client.on('message', async (message) => {
         if (keuangan.length === 0) {
           await client.sendMessage(message.from, '*[PESAN OTOMATIS]*\nMohon maaf, Laporan Keuangan belum ada.');
         } else {
-          const dataString = keuangan[0].data.toString('base64');
-          const media = new MessageMedia(keuangan[0].dataType, dataString, keuangan[0].dataName);
+          // const dataString = keuangan[0].data.toString('base64');
+          const media = new MessageMedia(keuangan[0].dataType, keuangan[0].data, keuangan[0].dataName);
           await client.sendMessage(message.from, media);
           await client.sendMessage(message.from, replyClosing);
         }
@@ -673,8 +618,8 @@ client.on('message', async (message) => {
         if (teologi.length === 0) {
           await client.sendMessage(message.from, '*[PESAN OTOMATIS]*\nMohon maaf, dokumen Pelayan, Bacaan & Nyanyian belum ada.');
         } else {
-          const dataString = teologi[0].data.toString('base64');
-          const media = new MessageMedia(teologi[0].dataType, dataString, teologi[0].dataName);
+          // const dataString = teologi[0].data.toString('base64');
+          const media = new MessageMedia(teologi[0].dataType, teologi[0].data, teologi[0].dataName);
           await client.sendMessage(message.from, media);
           await client.sendMessage(message.from, replyClosing);
         }
