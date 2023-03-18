@@ -25,7 +25,7 @@ const Teologi = require('./models/Teologi');
 
 const client = new Client({
   // authStrategy: new LocalAuth(),
-  // authStrategy: new LocalAuth(),
+  authStrategy: new LocalAuth(),
   puppeteer: {
     args: ['--no-sandbox', '--disable-setuid-sandbox'],
     // headless: false,
