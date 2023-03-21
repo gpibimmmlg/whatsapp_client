@@ -332,10 +332,10 @@ client.on('message', async (message) => {
       }
     }
   } else if (message.from != process.env.RESTRICTED_NUMBER) {
+    await client.sendMessage(message.from, '[Pesan Otomatis]\nLayanan Whatsapp ini sedang dalam pemeliharaan. Mohon maaf atas ketidaknyamanan ini.');
     //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
     //>>>>>>>>>>>>>>>>>> NON-BUTTON CODE <<<<<<<<<<<<<<<<<<<
     //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
     // if (message.body.indexOf('Mulai') === 0 || message.body.indexOf('mulai') === 0) {
     //   if (!tanggalWarta) {
     //     tanggalWarta = 'DD/MM/YY';
@@ -343,7 +343,6 @@ client.on('message', async (message) => {
     //   if (!tanggalTata) {
     //     tanggalTata = 'DD/MM/YY';
     //   }
-
     //   const reply1 = `[PESAN OTOMATIS]\nSilahkan membalas pesan ini dengan kata kunci yang tersedia.\n\nKata kunci:\n\n        *_Warta_*\nUntuk mendapatkan Warta Jemaat Terbaru.\n\n        *_Tata_*\nUntuk mendapatkan Tata Ibadah Minggu.\n\n        *_Jadwal_*\nUntuk mendapatkan Jadwal Ibadah Sepekan.\n\n        *_Langganan_*\nUntuk berlangganan menerima informasi tambahan seputar GPIB Immanuel Malang secara GRATIS.\n\n        *_Berhenti_*\nUntuk berhenti berlangganan.\n\n\nCatatan:\nDokumen yang tersedia, yaitu\nWarta Jemaat: tanggal ${tanggalWarta}\nTata Ibadah: tanggal ${tanggalTata}`;
     //   await client.sendMessage(message.from, reply1);
     // } else if (message.body.indexOf('Jadwal') === 0 || message.body.indexOf('jadwal') === 0) {
@@ -420,244 +419,218 @@ client.on('message', async (message) => {
     //   const opening = '[PESAN OTOMATIS]\nLayanan Whatsapp\nGPIB Immanuel Malang\n\nKata kunci yang anda masukkan SALAH, atau anda BELUM memulai layanan ini. Untuk memulai, silahkan balas pesan ini dengan kata kunci:\n\n       _*Mulai*_';
     //   await client.sendMessage(message.from, opening);
     // }
-
     //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
     //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
     //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
     //>>>>>>>>>>>>>>>>>> BUTTON CODE <<<<<<<<<<<<<<<<<<<<<<<
     //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-    if (message.body === 'Langganan') {
-      await client.sendMessage(message.from, replyLoading);
-
-      try {
-        const subs = await Subs.findOne({ phone: message.from });
-        if (subs) {
-          await client.sendMessage(message.from, '*[PESAN OTOMATIS]*\nAnda SUDAH berlangganan.');
-        } else {
-          const newSubs = new Subs({ phone: message.from });
-          await newSubs.save();
-          await client.sendMessage(message.from, '*[PESAN OTOMATIS]*\nAnda sudah berlangganan.\nNantikan informasi seputar GPIB Immanuel malang di kemudian hari.\nTerima kasih, Tuhan Yesus memberkati.');
-        }
-      } catch (err) {
-        await client.sendMessage(message.from, replyError);
-      }
-
-      //CLEAR MESSAGES
-      const chat = await client.getChatById(message.from);
-      await chat.clearMessages();
-    } else if (message.body === 'Berhenti Langganan') {
-      await client.sendMessage(message.from, replyLoading);
-
-      try {
-        const subs = await Subs.findOne({ phone: message.from });
-        if (!subs) {
-          await client.sendMessage(message.from, '*[PESAN OTOMATIS]*\nAnda BELUM berlangganan. Silahkan balas dengan kata kunci:\n\n        *_Langganan_*\n\nUntuk berlangganan secara GRATIS.');
-        } else {
-          await Subs.findOneAndDelete({ phone: message.from });
-          await client.sendMessage(message.from, '*[PESAN OTOMATIS]*\nAnda BERHENTI berlangganan.\nTerima kasih, Tuhan Yesus memberkati.');
-        }
-      } catch (err) {
-        await client.sendMessage(message.from, replyError);
-      }
-
-      //CLEAR MESSAGES
-      const chat = await client.getChatById(message.from);
-      await chat.clearMessages();
-    } else if (message.body === 'Warta Jemaat') {
-      try {
-        //REPLY PERTAMA
-        const buttons_reply_warta = new Buttons(
-          '[PESAN OTOMATIS]\n*Warta Jemaat*\nPilih dokumen warta yang anda inginkan.',
-          [
-            { body: 'Warta Immanuel', id: 'test-7' },
-            { body: 'Laporan Keuangan', id: 'test-8' },
-            { body: 'Pelayan, Bacaan & Nyanyian', id: 'test-9' },
-          ],
-          'Layanan Whatsapp GPIB Immanuel Malang',
-          'Silahkan tekan tombol di bawah'
-        ); // Reply button
-
-        await client.sendMessage(message.from, buttons_reply_warta);
-
-        //CLEAR MESSAGES
-        const chat = await client.getChatById(message.from);
-        await chat.clearMessages();
-      } catch (err) {
-        await client.sendMessage(message.from, replyError);
-      }
-
-      // await client.sendMessage(message.from, replyLoading);
-
-      // try {
-      //   const warta = await Warta.find().sort({ createdAt: -1 });
-      //   if (warta.length === 0) {
-      //     await client.sendMessage(message.from, '*[PESAN OTOMATIS]*\nMohon maaf, Warta Jemaat belum ada.');
-      //   } else {
-      //     const dataString = warta[0].data.toString('base64');
-      //     const media = new MessageMedia(warta[0].dataType, dataString, warta[0].dataName);
-      //     await client.sendMessage(message.from, media);
-      //   }
-      // } catch (err) {
-      //   await client.sendMessage(message.from, replyError);
-      // }
-
-      // //CLEAR MESSAGES
-      // const chat = await client.getChatById(message.from);
-      // await chat.clearMessages();
-    } else if (message.body === 'Tata Ibadah') {
-      await client.sendMessage(message.from, replyLoading);
-
-      try {
-        const tata = await Tata.find().sort({ createdAt: -1 });
-        if (tata.length < 2) {
-          await client.sendMessage(message.from, '*[PESAN OTOMATIS]*\nMohon maaf, Tata ibadah belum ada.');
-        } else {
-          // const dataString0 = tata[0].data.toString('base64');
-          // const dataString1 = tata[1].data.toString('base64');
-          const media1 = new MessageMedia(tata[0].dataType, tata[0].data, tata[0].dataName);
-          const media2 = new MessageMedia(tata[1].dataType, tata[1].data, tata[1].dataName);
-          await client.sendMessage(message.from, media1);
-          await client.sendMessage(message.from, media2);
-          await client.sendMessage(message.from, replyClosing);
-        }
-      } catch (err) {
-        await client.sendMessage(message.from, replyError);
-      }
-
-      //CLEAR MESSAGES
-      const chat = await client.getChatById(message.from);
-      await chat.clearMessages();
-    } else if (message.body === 'Jadwal Ibadah') {
-      await client.sendMessage(message.from, replyLoading);
-
-      try {
-        //LIHAT JADWAL
-        const jadwal = await Jadwal.find().sort({ createdAt: -1 });
-        if (jadwal.length === 0) {
-          await client.sendMessage(message.from, '*[PESAN OTOMATIS]*\nMohon maaf, jadwal ibadah belum ada.');
-        } else {
-          // const dataString = jadwal[0].data.toString('base64');
-          const media = new MessageMedia(jadwal[0].dataType, jadwal[0].data);
-          await client.sendMessage(message.from, media);
-          await client.sendMessage(message.from, replyClosing);
-        }
-      } catch (err) {
-        await client.sendMessage(message.from, replyError);
-      }
-
-      //CLEAR MESSAGES
-      const chat = await client.getChatById(message.from);
-      await chat.clearMessages();
-    } else if (message.body === 'Mulai') {
-      // if (!tanggalWarta) {
-      //   tanggalWarta = 'DD/MM/YY';
-      // }
-      // if (!tanggalTata) {
-      //   tanggalTata = 'DD/MM/YY';
-      // }
-
-      //REPLY KEDUA
-      const buttons_reply_mulai = new Buttons(
-        `di Layanan Whatsapp\nGPIB Immanuel Malang.\n\nAnda bisa mendapatkan dokumen Warta Jemaat, Tata Ibadah Minggu dan Jadwal Ibadah Sepekan dengan menekan tombol di bawah.\nLayanan ini tersedia 24 jam.`,
-        [
-          { body: 'Warta Jemaat', id: 'test-1' },
-          { body: 'Tata Ibadah', id: 'test-2' },
-          { body: 'Jadwal Ibadah', id: 'test-3' },
-        ],
-        'SELAMAT DATANG!!!',
-        'Pilih dokumen yang anda inginkan'
-      ); // Reply button
-
-      await client.sendMessage(message.from, buttons_reply_mulai);
-
-      //CLEAR MESSAGES
-      const chat = await client.getChatById(message.from);
-      await chat.clearMessages();
-    } else if (message.body === 'Warta Immanuel') {
-      await client.sendMessage(message.from, replyLoading);
-      try {
-        const immanuel = await Immanuel.find().sort({ createdAt: -1 });
-        if (immanuel.length === 0) {
-          await client.sendMessage(message.from, '*[PESAN OTOMATIS]*\nMohon maaf, Warta Immanuel belum ada.');
-        } else {
-          // const dataString = immanuel[0].data.toString('base64');
-          const media = new MessageMedia(immanuel[0].dataType, immanuel[0].data, immanuel[0].dataName);
-          await client.sendMessage(message.from, media);
-          await client.sendMessage(message.from, replyClosing);
-        }
-      } catch (err) {
-        await client.sendMessage(message.from, replyError);
-      }
-      //CLEAR MESSAGES
-      const chat = await client.getChatById(message.from);
-      await chat.clearMessages();
-    } else if (message.body === 'Laporan Keuangan') {
-      await client.sendMessage(message.from, replyLoading);
-      try {
-        const keuangan = await Keuangan.find().sort({ createdAt: -1 });
-        if (keuangan.length === 0) {
-          await client.sendMessage(message.from, '*[PESAN OTOMATIS]*\nMohon maaf, Laporan Keuangan belum ada.');
-        } else {
-          // const dataString = keuangan[0].data.toString('base64');
-          const media = new MessageMedia(keuangan[0].dataType, keuangan[0].data, keuangan[0].dataName);
-          await client.sendMessage(message.from, media);
-          await client.sendMessage(message.from, replyClosing);
-        }
-      } catch (err) {
-        await client.sendMessage(message.from, replyError);
-      }
-      //CLEAR MESSAGES
-      const chat = await client.getChatById(message.from);
-      await chat.clearMessages();
-    } else if (message.body === 'Pelayan, Bacaan & Nyanyian') {
-      await client.sendMessage(message.from, replyLoading);
-      try {
-        const teologi = await Teologi.find().sort({ createdAt: -1 });
-        if (teologi.length === 0) {
-          await client.sendMessage(message.from, '*[PESAN OTOMATIS]*\nMohon maaf, dokumen Pelayan, Bacaan & Nyanyian belum ada.');
-        } else {
-          // const dataString = teologi[0].data.toString('base64');
-          const media = new MessageMedia(teologi[0].dataType, teologi[0].data, teologi[0].dataName);
-          await client.sendMessage(message.from, media);
-          await client.sendMessage(message.from, replyClosing);
-        }
-      } catch (err) {
-        await client.sendMessage(message.from, replyError);
-      }
-      //CLEAR MESSAGES
-      const chat = await client.getChatById(message.from);
-      await chat.clearMessages();
-    } else {
-      //REPLY PERTAMA
-      const buttons_reply = new Buttons(
-        '[PESAN OTOMATIS]\n\nLayanan ini sudah berakhir atau belum dimulai.\n\nSilahkan balas pesan ini dengan menekan tombol di bawah.\n\nKeterangan:\n\n*_Mulai_* = Untuk memulai layanan Whatsapp ini.\n\n*_Langganan_* = Untuk berlangganan menerima informasi tambahan seputar GPIB Immanuel Malang secara GRATIS.\n\n*_Berhenti_* = Untuk berhenti berlangganan.',
-        [
-          { body: 'Mulai', id: 'test-4' },
-          { body: 'Langganan', id: 'test-5' },
-          { body: 'Berhenti Langganan', id: 'test-6' },
-        ],
-        'Layanan Whatsapp GPIB Immanuel Malang',
-        'Silahkan tekan tombol di bawah'
-      ); // Reply button
-
-      await client.sendMessage(message.from, buttons_reply);
-
-      //CLEAR MESSAGES
-      const chat = await client.getChatById(message.from);
-      await chat.clearMessages();
-    }
-
+    // if (message.body === 'Langganan') {
+    //   await client.sendMessage(message.from, replyLoading);
+    //   try {
+    //     const subs = await Subs.findOne({ phone: message.from });
+    //     if (subs) {
+    //       await client.sendMessage(message.from, '*[PESAN OTOMATIS]*\nAnda SUDAH berlangganan.');
+    //     } else {
+    //       const newSubs = new Subs({ phone: message.from });
+    //       await newSubs.save();
+    //       await client.sendMessage(message.from, '*[PESAN OTOMATIS]*\nAnda sudah berlangganan.\nNantikan informasi seputar GPIB Immanuel malang di kemudian hari.\nTerima kasih, Tuhan Yesus memberkati.');
+    //     }
+    //   } catch (err) {
+    //     await client.sendMessage(message.from, replyError);
+    //   }
+    //   //CLEAR MESSAGES
+    //   const chat = await client.getChatById(message.from);
+    //   await chat.clearMessages();
+    // } else if (message.body === 'Berhenti Langganan') {
+    //   await client.sendMessage(message.from, replyLoading);
+    //   try {
+    //     const subs = await Subs.findOne({ phone: message.from });
+    //     if (!subs) {
+    //       await client.sendMessage(message.from, '*[PESAN OTOMATIS]*\nAnda BELUM berlangganan. Silahkan balas dengan kata kunci:\n\n        *_Langganan_*\n\nUntuk berlangganan secara GRATIS.');
+    //     } else {
+    //       await Subs.findOneAndDelete({ phone: message.from });
+    //       await client.sendMessage(message.from, '*[PESAN OTOMATIS]*\nAnda BERHENTI berlangganan.\nTerima kasih, Tuhan Yesus memberkati.');
+    //     }
+    //   } catch (err) {
+    //     await client.sendMessage(message.from, replyError);
+    //   }
+    //   //CLEAR MESSAGES
+    //   const chat = await client.getChatById(message.from);
+    //   await chat.clearMessages();
+    // } else if (message.body === 'Warta Jemaat') {
+    //   try {
+    //     //REPLY PERTAMA
+    //     const buttons_reply_warta = new Buttons(
+    //       '[PESAN OTOMATIS]\n*Warta Jemaat*\nPilih dokumen warta yang anda inginkan.',
+    //       [
+    //         { body: 'Warta Immanuel', id: 'test-7' },
+    //         { body: 'Laporan Keuangan', id: 'test-8' },
+    //         { body: 'Pelayan, Bacaan & Nyanyian', id: 'test-9' },
+    //       ],
+    //       'Layanan Whatsapp GPIB Immanuel Malang',
+    //       'Silahkan tekan tombol di bawah'
+    //     ); // Reply button
+    //     await client.sendMessage(message.from, buttons_reply_warta);
+    //     //CLEAR MESSAGES
+    //     const chat = await client.getChatById(message.from);
+    //     await chat.clearMessages();
+    //   } catch (err) {
+    //     await client.sendMessage(message.from, replyError);
+    //   }
+    //   // await client.sendMessage(message.from, replyLoading);
+    //   // try {
+    //   //   const warta = await Warta.find().sort({ createdAt: -1 });
+    //   //   if (warta.length === 0) {
+    //   //     await client.sendMessage(message.from, '*[PESAN OTOMATIS]*\nMohon maaf, Warta Jemaat belum ada.');
+    //   //   } else {
+    //   //     const dataString = warta[0].data.toString('base64');
+    //   //     const media = new MessageMedia(warta[0].dataType, dataString, warta[0].dataName);
+    //   //     await client.sendMessage(message.from, media);
+    //   //   }
+    //   // } catch (err) {
+    //   //   await client.sendMessage(message.from, replyError);
+    //   // }
+    //   // //CLEAR MESSAGES
+    //   // const chat = await client.getChatById(message.from);
+    //   // await chat.clearMessages();
+    // } else if (message.body === 'Tata Ibadah') {
+    //   await client.sendMessage(message.from, replyLoading);
+    //   try {
+    //     const tata = await Tata.find().sort({ createdAt: -1 });
+    //     if (tata.length < 2) {
+    //       await client.sendMessage(message.from, '*[PESAN OTOMATIS]*\nMohon maaf, Tata ibadah belum ada.');
+    //     } else {
+    //       // const dataString0 = tata[0].data.toString('base64');
+    //       // const dataString1 = tata[1].data.toString('base64');
+    //       const media1 = new MessageMedia(tata[0].dataType, tata[0].data, tata[0].dataName);
+    //       const media2 = new MessageMedia(tata[1].dataType, tata[1].data, tata[1].dataName);
+    //       await client.sendMessage(message.from, media1);
+    //       await client.sendMessage(message.from, media2);
+    //       await client.sendMessage(message.from, replyClosing);
+    //     }
+    //   } catch (err) {
+    //     await client.sendMessage(message.from, replyError);
+    //   }
+    //   //CLEAR MESSAGES
+    //   const chat = await client.getChatById(message.from);
+    //   await chat.clearMessages();
+    // } else if (message.body === 'Jadwal Ibadah') {
+    //   await client.sendMessage(message.from, replyLoading);
+    //   try {
+    //     //LIHAT JADWAL
+    //     const jadwal = await Jadwal.find().sort({ createdAt: -1 });
+    //     if (jadwal.length === 0) {
+    //       await client.sendMessage(message.from, '*[PESAN OTOMATIS]*\nMohon maaf, jadwal ibadah belum ada.');
+    //     } else {
+    //       // const dataString = jadwal[0].data.toString('base64');
+    //       const media = new MessageMedia(jadwal[0].dataType, jadwal[0].data);
+    //       await client.sendMessage(message.from, media);
+    //       await client.sendMessage(message.from, replyClosing);
+    //     }
+    //   } catch (err) {
+    //     await client.sendMessage(message.from, replyError);
+    //   }
+    //   //CLEAR MESSAGES
+    //   const chat = await client.getChatById(message.from);
+    //   await chat.clearMessages();
+    // } else if (message.body === 'Mulai') {
+    //   // if (!tanggalWarta) {
+    //   //   tanggalWarta = 'DD/MM/YY';
+    //   // }
+    //   // if (!tanggalTata) {
+    //   //   tanggalTata = 'DD/MM/YY';
+    //   // }
+    //   //REPLY KEDUA
+    //   const buttons_reply_mulai = new Buttons(
+    //     `di Layanan Whatsapp\nGPIB Immanuel Malang.\n\nAnda bisa mendapatkan dokumen Warta Jemaat, Tata Ibadah Minggu dan Jadwal Ibadah Sepekan dengan menekan tombol di bawah.\nLayanan ini tersedia 24 jam.`,
+    //     [
+    //       { body: 'Warta Jemaat', id: 'test-1' },
+    //       { body: 'Tata Ibadah', id: 'test-2' },
+    //       { body: 'Jadwal Ibadah', id: 'test-3' },
+    //     ],
+    //     'SELAMAT DATANG!!!',
+    //     'Pilih dokumen yang anda inginkan'
+    //   ); // Reply button
+    //   await client.sendMessage(message.from, buttons_reply_mulai);
+    //   //CLEAR MESSAGES
+    //   const chat = await client.getChatById(message.from);
+    //   await chat.clearMessages();
+    // } else if (message.body === 'Warta Immanuel') {
+    //   await client.sendMessage(message.from, replyLoading);
+    //   try {
+    //     const immanuel = await Immanuel.find().sort({ createdAt: -1 });
+    //     if (immanuel.length === 0) {
+    //       await client.sendMessage(message.from, '*[PESAN OTOMATIS]*\nMohon maaf, Warta Immanuel belum ada.');
+    //     } else {
+    //       // const dataString = immanuel[0].data.toString('base64');
+    //       const media = new MessageMedia(immanuel[0].dataType, immanuel[0].data, immanuel[0].dataName);
+    //       await client.sendMessage(message.from, media);
+    //       await client.sendMessage(message.from, replyClosing);
+    //     }
+    //   } catch (err) {
+    //     await client.sendMessage(message.from, replyError);
+    //   }
+    //   //CLEAR MESSAGES
+    //   const chat = await client.getChatById(message.from);
+    //   await chat.clearMessages();
+    // } else if (message.body === 'Laporan Keuangan') {
+    //   await client.sendMessage(message.from, replyLoading);
+    //   try {
+    //     const keuangan = await Keuangan.find().sort({ createdAt: -1 });
+    //     if (keuangan.length === 0) {
+    //       await client.sendMessage(message.from, '*[PESAN OTOMATIS]*\nMohon maaf, Laporan Keuangan belum ada.');
+    //     } else {
+    //       // const dataString = keuangan[0].data.toString('base64');
+    //       const media = new MessageMedia(keuangan[0].dataType, keuangan[0].data, keuangan[0].dataName);
+    //       await client.sendMessage(message.from, media);
+    //       await client.sendMessage(message.from, replyClosing);
+    //     }
+    //   } catch (err) {
+    //     await client.sendMessage(message.from, replyError);
+    //   }
+    //   //CLEAR MESSAGES
+    //   const chat = await client.getChatById(message.from);
+    //   await chat.clearMessages();
+    // } else if (message.body === 'Pelayan, Bacaan & Nyanyian') {
+    //   await client.sendMessage(message.from, replyLoading);
+    //   try {
+    //     const teologi = await Teologi.find().sort({ createdAt: -1 });
+    //     if (teologi.length === 0) {
+    //       await client.sendMessage(message.from, '*[PESAN OTOMATIS]*\nMohon maaf, dokumen Pelayan, Bacaan & Nyanyian belum ada.');
+    //     } else {
+    //       // const dataString = teologi[0].data.toString('base64');
+    //       const media = new MessageMedia(teologi[0].dataType, teologi[0].data, teologi[0].dataName);
+    //       await client.sendMessage(message.from, media);
+    //       await client.sendMessage(message.from, replyClosing);
+    //     }
+    //   } catch (err) {
+    //     await client.sendMessage(message.from, replyError);
+    //   }
+    //   //CLEAR MESSAGES
+    //   const chat = await client.getChatById(message.from);
+    //   await chat.clearMessages();
+    // } else {
+    //   //REPLY PERTAMA
+    //   const buttons_reply = new Buttons(
+    //     '[PESAN OTOMATIS]\n\nLayanan ini sudah berakhir atau belum dimulai.\n\nSilahkan balas pesan ini dengan menekan tombol di bawah.\n\nKeterangan:\n\n*_Mulai_* = Untuk memulai layanan Whatsapp ini.\n\n*_Langganan_* = Untuk berlangganan menerima informasi tambahan seputar GPIB Immanuel Malang secara GRATIS.\n\n*_Berhenti_* = Untuk berhenti berlangganan.',
+    //     [
+    //       { body: 'Mulai', id: 'test-4' },
+    //       { body: 'Langganan', id: 'test-5' },
+    //       { body: 'Berhenti Langganan', id: 'test-6' },
+    //     ],
+    //     'Layanan Whatsapp GPIB Immanuel Malang',
+    //     'Silahkan tekan tombol di bawah'
+    //   ); // Reply button
+    //   await client.sendMessage(message.from, buttons_reply);
+    //   //CLEAR MESSAGES
+    //   const chat = await client.getChatById(message.from);
+    //   await chat.clearMessages();
+    // }
     //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
     //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
     //------------------ OLD CODE -----------------
-
     // await client.sendMessage(message.from, 'SELAMAT DATANG di \n*Layanan Whatsapp*\n*_GPIB Immanuel Malang_*\n\nLayanan ini akan mulai beroperasi tanggal *22 Oktober 2022.*\n\nTuhan Yesus memberkati.');
-
     // await client.sendMessage(message.from, button);
-
     // //FIND NEWEST WARTA & TATA
     // const warta = await Warta.find().sort({ createdAt: -1 });
     // const wartaNameArr = warta[0].dataName.split('');
@@ -667,7 +640,6 @@ client.on('message', async (message) => {
     // }
     // const wartaDate = wartaDateArr.join('');
     // // console.log(wartaDate);
-
     // const tata = await Tata.find().sort({ createdAt: -1 });
     // const tataNameArr = tata[0].dataName.split('');
     // let tataDateArr = [];
@@ -677,21 +649,16 @@ client.on('message', async (message) => {
     // const tataDate = tataDateArr.join('');
     // // console.log(tataDate);
     // // console.log(warta);
-
     //  // REPLY KEDUA
     // const buttons_reply_lainlain = new Buttons('GPIB Immanuel Malang juga dapat memberi anda dokumen-dokumen lainnya, seperti:', [
     //   { body: 'Litbang', id: 'test-4' },
     //   { body: 'Info', id: 'test-5' },
     //   { body: 'Merchandise', id: 'test-6' },
     // ]); // Reply button
-
     // //OPENING
     // const buttons_reply_mulai = new Buttons('Layanan ini sudah berakhir atau belum dimulai.', [{ body: 'Mulai', id: 'test-4' }], 'Layanan Whatsapp GPIB Immanuel Malang', 'Silahkan tekan tombol di bawah untuk memulai.'); // Reply button
-
     // const buttons_reply_kembali = new Buttons('Butuh dokumen lainnya?', [{ body: 'Kembali ke menu utama', id: 'test-5' }]); // Reply button
-
     // // const media = MessageMedia.fromFilePath('./public/pdf/warta_jemaat_minggu_tanggal.pdf');
-
     // ------------------------------------------------
   }
 });
