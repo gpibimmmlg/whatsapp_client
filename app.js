@@ -494,9 +494,9 @@ client.on('message', async (message) => {
       // } catch (err) {
       //   await client.sendMessage(message.from, replyError);
       // }
-      // //CLEAR MESSAGES
-      // const chat = await client.getChatById(message.from);
-      // await chat.clearMessages();
+      //CLEAR MESSAGES
+      const chat = await client.getChatById(message.from);
+      await chat.clearMessages();
     } else if (messageReceived === 'tata' || messageReceived === '5') {
       await client.sendMessage(message.from, replyLoading);
       try {
@@ -561,9 +561,9 @@ client.on('message', async (message) => {
       //   'Pilih dokumen yang anda inginkan'
       // ); // Reply button
       // await client.sendMessage(message.from, buttons_reply_mulai);
-      // //CLEAR MESSAGES
-      // const chat = await client.getChatById(message.from);
-      // await chat.clearMessages();
+      //CLEAR MESSAGES
+      const chat = await client.getChatById(message.from);
+      await chat.clearMessages();
     } else if (messageReceived === 'immanuel' || messageReceived === 'imanuel' || messageReceived === '7') {
       await client.sendMessage(message.from, replyLoading);
       try {
@@ -615,9 +615,9 @@ client.on('message', async (message) => {
       } catch (err) {
         await client.sendMessage(message.from, replyError);
       }
-      // //CLEAR MESSAGES
-      // const chat = await client.getChatById(message.from);
-      // await chat.clearMessages();
+      //CLEAR MESSAGES
+      const chat = await client.getChatById(message.from);
+      await chat.clearMessages();
     } else {
       //REPLY PERTAMA
       const replyInit =
@@ -635,9 +635,9 @@ client.on('message', async (message) => {
       //   'Silahkan tekan tombol di bawah'
       // ); // Reply button
       // await client.sendMessage(message.from, buttons_reply);
-      // //CLEAR MESSAGES
-      // const chat = await client.getChatById(message.from);
-      // await chat.clearMessages();
+      //CLEAR MESSAGES
+      const chat = await client.getChatById(message.from);
+      await chat.clearMessages();
     }
     //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
     //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
