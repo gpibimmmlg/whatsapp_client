@@ -621,7 +621,7 @@ client.on('message', async (message) => {
     } else {
       //REPLY PERTAMA
       const replyInit =
-        'PESAN OTOMATIS]\nLayanan ini belum dimulai atau katakunci salah.\n\nSilahkan balas pesan ini dengan _katakunci_ atau _angka_:\n\n1. *_Mulai_* = Untuk memulai layanan Whatsapp ini.\n2. *_Langganan_* = Untuk berlangganan menerima informasi tambahan seputar GPIB Immanuel Malang secara GRATIS.\n3. *_Berhenti_* = Untuk berhenti berlangganan.';
+        '[PESAN OTOMATIS]\nLayanan ini belum dimulai atau katakunci salah.\n\nSilahkan balas pesan ini dengan _katakunci_ atau _angka_:\n\n1. *_Mulai_* = Untuk memulai layanan Whatsapp ini.\n2. *_Langganan_* = Untuk berlangganan menerima informasi tambahan seputar GPIB Immanuel Malang secara GRATIS.\n3. *_Berhenti_* = Untuk berhenti berlangganan.';
 
       await client.sendMessage(message.from, replyInit);
       // const buttons_reply = new Buttons(
