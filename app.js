@@ -113,7 +113,7 @@ client.on('message', async (message) => {
   const replyError = '[PESAN OTOMATIS]\nTerjadi gangguan.\nSilahkan coba beberapa saat lagi';
   const replyLoading = '[PESAN OTOMATIS]\nMohon tunggu...';
   const replyClosing = '[PESAN OTOMATIS]\nTerima kasih telah mengunduh.';
-  if (message.from === process.env.ADMIN_NUMBER) {
+  if (message.from === process.env.ADMIN_NUMBER || message.from === process.env.MANAGER_NUMBER) {
     if (message.hasMedia) {
       const mediaReceived = await message.downloadMedia();
       if (mediaReceived.filename === undefined) {
@@ -307,15 +307,18 @@ client.on('message', async (message) => {
         } catch (err) {
           await client.sendMessage(message.from, replyError);
         }
-      } else if (message.body.indexOf('!UpdateTanggal') === 0) {
-        await client.sendMessage(message.from, replyLoading);
-        try {
-          updateTanggalWartaTata();
-          await client.sendMessage(message.from, 'Tanggal Warta dan Tata berhasil diupdate.');
-        } catch (err) {
-          await client.sendMessage(message.from, replyError);
-        }
-      } else if (message.body.indexOf('!JumlahSubscriber') === 0) {
+      }
+
+      // else if (message.body.indexOf('!UpdateTanggal') === 0) {
+      //   await client.sendMessage(message.from, replyLoading);
+      //   try {
+      //     updateTanggalWartaTata();
+      //     await client.sendMessage(message.from, 'Tanggal Warta dan Tata berhasil diupdate.');
+      //   } catch (err) {
+      //     await client.sendMessage(message.from, replyError);
+      //   }
+      // }
+      else if (message.body.indexOf('!JumlahSubscriber') === 0) {
         await client.sendMessage(message.from, replyLoading);
         try {
           const subses = await Subs.find();
@@ -499,6 +502,32 @@ client.on('message', async (message) => {
       await chat.clearMessages();
     } else if (messageReceived === 'tata' || messageReceived === '5') {
       await client.sendMessage(message.from, replyLoading);
+
+      // const date = new Date();
+
+      // if (date.getDay() <= 3 && date.getDate() > 0) {
+      //   leaves = 3 - date.getDay();
+      // } else {
+      //   leaves = 7 - date.getDay();
+      // }
+
+      // const leaves = 7 - date.getDay();
+
+      // const targetDate = new Date(Date.now() + leaves * 24 * 60 * 60 * 1000);
+      // let DD = targetDate.getDate();
+      // let MM = targetDate.getMonth() + 1;
+      // const YY = targetDate.getFullYear().toString().split('').slice(2).join('');
+
+      // if (DD < 10) {
+      //   DD = '0' + DD;
+      // }
+      // if (MM < 10) {
+      //   MM = '0' + MM;
+      // }
+
+      // const searchFilename1 = `1_tata_ibadah_${DD}-${MM}-${YY}.pdf`;
+      // const searchFilename2 = `2_tata_ibadah_${DD}-${MM}-${YY}.pdf`;
+
       try {
         const tata = await Tata.find().sort({ createdAt: -1 });
         if (tata.length < 2) {
