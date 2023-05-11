@@ -21,7 +21,7 @@ const Subs = require('./models/Subs');
 const Teks = require('./models/Teks');
 const Immanuel = require('./models/Immanuel');
 const Keuangan = require('./models/Keuangan');
-const Teologi = require('./models/Teologi');
+const Ulang = require('./models/Teologi');
 
 const client = new Client({
   // authStrategy: new LocalAuth(),
@@ -113,6 +113,7 @@ client.on('message', async (message) => {
   const replyError = '[PESAN OTOMATIS]\nTerjadi gangguan.\nSilahkan coba beberapa saat lagi';
   const replyLoading = '[PESAN OTOMATIS]\nMohon tunggu...';
   const replyClosing = '[PESAN OTOMATIS]\nTerima kasih telah mengunduh.';
+  const invalidExt = '[PESAN OTOMATIS]\nFormat dokumen Salah.';
   if (message.from === process.env.ADMIN_NUMBER || message.from === process.env.MANAGER_NUMBER) {
     if (message.hasMedia) {
       const mediaReceived = await message.downloadMedia();
@@ -132,20 +133,22 @@ client.on('message', async (message) => {
         } catch (err) {
           await client.sendMessage(message.from, replyError);
         }
-      } else if (mediaReceived.mimetype === 'image/png' || mediaReceived.mimetype === 'image/jpeg' || mediaReceived.mimetype === 'image/jpg') {
-        await client.sendMessage(message.from, replyLoading);
-        try {
-          // const dataBuf = Buffer.from(mediaReceived.data, 'base64');
-          //SIMPAN WARTA JEMAAT KE DB
-          const newJadwal = new Jadwal({ dataType: mediaReceived.mimetype, data: mediaReceived.data, dataName: mediaReceived.filename });
-          await newJadwal.save();
+      }
+      // else if (mediaReceived.mimetype === 'image/png' || mediaReceived.mimetype === 'image/jpeg' || mediaReceived.mimetype === 'image/jpg') {
+      //   await client.sendMessage(message.from, replyLoading);
+      //   try {
+      //     // const dataBuf = Buffer.from(mediaReceived.data, 'base64');
+      //     //SIMPAN WARTA JEMAAT KE DB
+      //     const newJadwal = new Jadwal({ dataType: mediaReceived.mimetype, data: mediaReceived.data, dataName: mediaReceived.filename });
+      //     await newJadwal.save();
 
-          //REPLY TO ADMIN
-          await client.sendMessage(message.from, 'jadwal diterima.');
-        } catch (err) {
-          await client.sendMessage(message.from, replyError);
-        }
-      } else if (mediaReceived.filename.indexOf('warta_immanuel') === 0) {
+      //     //REPLY TO ADMIN
+      //     await client.sendMessage(message.from, 'jadwal diterima.');
+      //   } catch (err) {
+      //     await client.sendMessage(message.from, replyError);
+      //   }
+      // }
+      else if (mediaReceived.filename.indexOf('warta_immanuel') === 0) {
         await client.sendMessage(message.from, replyLoading);
         try {
           // const dataBuf = Buffer.from(mediaReceived.data, 'base64');
@@ -171,24 +174,29 @@ client.on('message', async (message) => {
         } catch (err) {
           await client.sendMessage(message.from, replyError);
         }
-      } else if (mediaReceived.filename.indexOf('liturgi_pelayan') === 0) {
+      } else if (mediaReceived.filename.indexOf('ulang_tahun') === 0) {
         await client.sendMessage(message.from, replyLoading);
-        try {
-          // const dataBuf = Buffer.from(mediaReceived.data, 'base64');
-          //SIMPAN WARTA JEMAAT KE DB
-          const newTeologi = new Teologi({ dataType: mediaReceived.mimetype, data: mediaReceived.data, dataName: mediaReceived.filename });
-          await newTeologi.save();
+        if (mediaReceived.mimetype === 'image/jpg' || mediaReceived.mimetype === 'image/png' || mediaReceived.mimetype === 'image/jpeg') {
+          try {
+            // const dataBuf = Buffer.from(mediaReceived.data, 'base64');
+            //SIMPAN WARTA JEMAAT KE DB
+            const newUlang = new Ulang({ dataType: mediaReceived.mimetype, data: mediaReceived.data, dataName: mediaReceived.filename });
+            await newUlang.save();
 
-          //REPLY TO ADMIN
-          await client.sendMessage(message.from, 'liturgi pelayan diterima');
-        } catch (err) {
-          await client.sendMessage(message.from, replyError);
+            //REPLY TO ADMIN
+            await client.sendMessage(message.from, 'dokumen Ulang Tahun diterima');
+          } catch (err) {
+            await client.sendMessage(message.from, replyError);
+          }
+        } else {
+          await client.sendMessage(message.from, invalidExt);
         }
       } else {
+        // console.log(mediaReceived);
         // console.log(media);
         await client.sendMessage(
           message.from,
-          'File tidak dikenal. Pastikan nama file dan jenis file yang anda masukkan sudah benar.\nFormat nama file: \n_warta_jemaat_02-01-22_\n_1_tata_ibadah_19-05-22_\n_warta_immanuel_27-10-23_\n_laporan_keuangan_17-01-23_\n_liturgi_pelayan_06-12-23_\nJenis file:\nWarta Jemaat = _pdf_ (file document)\nTata Ibadah = _pdf_ (file document)\nJadwal Ibadah = _png_ / _jpg_ / _jpeg_ (langsung file foto/galeri)'
+          'File tidak dikenal. Pastikan nama file dan jenis file yang anda masukkan sudah benar.\nFormat nama file: \n_1_tata_ibadah_19-05-22_\n_warta_immanuel_27-10-23_\n_laporan_keuangan_17-01-23_\n_ulang_tahun_06-12-23_\nJenis file:\nWarta Immanuel, Laporan Keuangan, dan Ulang Tahun = _pdf_ (file document)\nTata Ibadah = _pdf_ (file document)\nUlang Tahun = _png_ / _jpg_ / _jpeg_ (kirim via dokumen, bukan via galeri)'
         );
       }
     } else {
@@ -246,15 +254,15 @@ client.on('message', async (message) => {
         } catch (err) {
           await client.sendMessage(message.from, replyError);
         }
-      } else if (message.body.indexOf('!LihatLiturgiPelayan') === 0) {
+      } else if (message.body.indexOf('!LihatUlangTahun') === 0) {
         await client.sendMessage(message.from, replyLoading);
         try {
-          const teologi = await Teologi.find().sort({ createdAt: -1 });
-          if (teologi[0] === undefined) {
-            await client.sendMessage(message.from, 'liturgi pelayan belum ada');
+          const ulang = await Ulang.find().sort({ createdAt: -1 });
+          if (ulang[0] === undefined) {
+            await client.sendMessage(message.from, 'Dokumen Ulang Tahun belum ada');
           } else {
-            // const dataString = teologi[0].data.toString('base64');
-            const media = new MessageMedia(teologi[0].dataType, teologi[0].data, teologi[0].dataName);
+            // const dataString = ulang[0].data.toString('base64');
+            const media = new MessageMedia(ulang[0].dataType, ulang[0].data);
             await client.sendMessage(message.from, media);
           }
         } catch (err) {
@@ -273,20 +281,6 @@ client.on('message', async (message) => {
             const media2 = new MessageMedia(tata[1].dataType, tata[1].data, tata[1].dataName);
             await client.sendMessage(message.from, media1);
             await client.sendMessage(message.from, media2);
-          }
-        } catch (err) {
-          await client.sendMessage(message.from, replyError);
-        }
-      } else if (message.body.indexOf('!LihatJadwal') === 0) {
-        await client.sendMessage(message.from, replyLoading);
-        try {
-          const jadwal = await Jadwal.find().sort({ createdAt: -1 });
-          if (jadwal[0] === undefined) {
-            await client.sendMessage(message.from, 'jadwal belum ada');
-          } else {
-            // const dataString = jadwal[0].data.toString('base64');
-            const media = new MessageMedia(jadwal[0].dataType, jadwal[0].data, jadwal[0].dataName);
-            await client.sendMessage(message.from, media);
           }
         } catch (err) {
           await client.sendMessage(message.from, replyError);
@@ -330,99 +324,13 @@ client.on('message', async (message) => {
       } else {
         await client.sendMessage(
           message.from,
-          'Kata kunci salah.\nKata Kunci:\n\n        !Teks\n        !LihatTeks\n        !LihatWarta\n        !LihatTata\n        !LihatJadwal\n        !BroadcastTeks\n        !JumlahSubscriber\n\nFormat nama file: \n_1_tata_ibadah_19-05-22_\n_warta_immanuel_27-10-23_\n_laporan_keuangan_17-01-23_\n_liturgi_pelayan_06-12-23_\nJenis file:\nTata Ibadah = _pdf_ (file document)\nJadwal Ibadah = _png_ / _jpg_ / _jpeg_ (langsung file foto/galeri)\nWarta Immanuel = _pdf_ (file document)\nLaporan Keuangan = _pdf_ (file document)\nLiturgi Pelayan = _pdf_ (file document)'
+          'Kata kunci salah.\nKata Kunci:\n\n        !Teks\n        !LihatTeks\n        !LihatWartaImmanuel\n        !!LihatLaporanKeuangan\n        !!LihatUlangTahun\n        !LihatTata\n        !BroadcastTeks\n        !JumlahSubscriber\n\nFormat nama file: \n_1_tata_ibadah_19-05-22_\n_warta_immanuel_27-10-23_\n_laporan_keuangan_17-01-23_\n_ulang_tahun_06-12-23_\nJenis file:\nTata Ibadah = _pdf_ (file document)\nJadwal Ibadah = _png_ / _jpg_ / _jpeg_ (langsung file foto/galeri)\nWarta Immanuel = _pdf_ (file document)\nLaporan Keuangan = _pdf_ (file document)\nUlang Tahun = _pdf_ (file document)'
         );
       }
     }
   } else if (message.from != process.env.RESTRICTED_NUMBER) {
     // await client.sendMessage(message.from, '[Pesan Otomatis]\nLayanan Whatsapp ini sedang dalam pemeliharaan. Mohon maaf atas ketidaknyamanan ini.');
     const messageReceived = message.body.replace(/\s/g, '').toLowerCase();
-    //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-    //>>>>>>>>>>>>>>>>>> NON-BUTTON CODE <<<<<<<<<<<<<<<<<<<
-    //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-    // if (message.body.indexOf('Mulai') === 0 || message.body.indexOf('mulai') === 0) {
-    //   if (!tanggalWarta) {
-    //     tanggalWarta = 'DD/MM/YY';
-    //   }
-    //   if (!tanggalTata) {
-    //     tanggalTata = 'DD/MM/YY';
-    //   }
-    //   const reply1 = `[PESAN OTOMATIS]\nSilahkan membalas pesan ini dengan kata kunci yang tersedia.\n\nKata kunci:\n\n        *_Warta_*\nUntuk mendapatkan Warta Jemaat Terbaru.\n\n        *_Tata_*\nUntuk mendapatkan Tata Ibadah Minggu.\n\n        *_Jadwal_*\nUntuk mendapatkan Jadwal Ibadah Sepekan.\n\n        *_Langganan_*\nUntuk berlangganan menerima informasi tambahan seputar GPIB Immanuel Malang secara GRATIS.\n\n        *_Berhenti_*\nUntuk berhenti berlangganan.\n\n\nCatatan:\nDokumen yang tersedia, yaitu\nWarta Jemaat: tanggal ${tanggalWarta}\nTata Ibadah: tanggal ${tanggalTata}`;
-    //   await client.sendMessage(message.from, reply1);
-    // } else if (message.body.indexOf('Jadwal') === 0 || message.body.indexOf('jadwal') === 0) {
-    //   await client.sendMessage(message.from, replyLoading);
-    //   try {
-    //     //LIHAT JADWAL
-    //     const jadwal = await Jadwal.find().sort({ createdAt: -1 });
-    //     if (!jadwal) {
-    //       await client.sendMessage(message.from, '[PESAN OTOMATIS]\nJadwal Ibadah belum ada.');
-    //     } else {
-    //       const media = new MessageMedia(jadwal[0].dataType, jadwal[0].data);
-    //       await client.sendMessage(message.from, media);
-    //     }
-    //   } catch (err) {
-    //     await client.sendMessage(message.from, replyError);
-    //   }
-    // } else if (message.body.indexOf('Tata') === 0 || message.body.indexOf('tata') === 0) {
-    //   await client.sendMessage(message.from, replyLoading);
-    //   try {
-    //     const tata = await Tata.find().sort({ createdAt: -1 });
-    //     if (tata.length < 2) {
-    //       await client.sendMessage(message.from, '[PESAN OTOMATIS]\nMohon maaf, Tata ibadah belum ada.');
-    //     } else {
-    //       const media1 = new MessageMedia(tata[0].dataType, tata[0].data, tata[0].dataName);
-    //       const media2 = new MessageMedia(tata[1].dataType, tata[1].data, tata[1].dataName);
-    //       await client.sendMessage(message.from, media1);
-    //       await client.sendMessage(message.from, media2);
-    //     }
-    //   } catch (err) {
-    //     await client.sendMessage(message.from, replyError);
-    //   }
-    // } else if (message.body.indexOf('Warta') === 0 || message.body.indexOf('warta') === 0) {
-    //   await client.sendMessage(message.from, replyLoading);
-    //   try {
-    //     const warta = await Warta.find().sort({ createdAt: -1 });
-    //     if (!warta) {
-    //       await client.sendMessage(message.from, '[PESAN OTOMATIS]\nWarta Jemaat belum ada.');
-    //     } else {
-    //       const media = new MessageMedia(warta[0].dataType, warta[0].data, warta[0].dataName);
-    //       await client.sendMessage(message.from, media);
-    //     }
-    //   } catch (err) {
-    //     await client.sendMessage(message.from, replyError);
-    //   }
-    // } else if (message.body.indexOf('Langganan') === 0 || message.body.indexOf('langganan') === 0) {
-    //   await client.sendMessage(message.from, replyLoading);
-    //   try {
-    //     const subs = await Subs.findOne({ phone: message.from });
-    //     if (subs) {
-    //       await client.sendMessage(message.from, '[PESAN OTOMATIS]\nAnda SUDAH berlangganan.');
-    //     } else {
-    //       const newSubs = new Subs({ phone: message.from });
-    //       await newSubs.save();
-    //       await client.sendMessage(message.from, '[PESAN OTOMATIS]\nAnda sudah berlangganan.\nNantikan informasi seputar GPIB Immanuel Malang di kemudian hari.\nTerima kasih, Tuhan Yesus memberkati.');
-    //     }
-    //   } catch (err) {
-    //     await client.sendMessage(message.from, replyError);
-    //   }
-    // } else if (message.body.indexOf('Berhenti') === 0 || message.body.indexOf('berhenti') === 0) {
-    //   await client.sendMessage(message.from, replyLoading);
-    //   try {
-    //     const subs = await Subs.findOne({ phone: message.from });
-    //     if (!subs) {
-    //       await client.sendMessage(message.from, '[PESAN OTOMATIS]\nAnda BELUM berlangganan. Silahkan balas dengan kata kunci:\n\n        *_Langganan_*\n\nUntuk berlangganan secara GRATIS.');
-    //     } else {
-    //       await Subs.findOneAndDelete({ phone: message.from });
-    //       await client.sendMessage(message.from, '[PESAN OTOMATIS]\nAnda BERHENTI berlangganan.\nTerima kasih, Tuhan Yesus memberkati.');
-    //     }
-    //   } catch (err) {
-    //     await client.sendMessage(message.from, replyError);
-    //   }
-    // } else {
-    //   //   await client.sendMessage(message.from, '👋 Hello!');
-    //   const opening = '[PESAN OTOMATIS]\nLayanan Whatsapp\nGPIB Immanuel Malang\n\nKata kunci yang anda masukkan SALAH, atau anda BELUM memulai layanan ini. Untuk memulai, silahkan balas pesan ini dengan kata kunci:\n\n       _*Mulai*_';
-    //   await client.sendMessage(message.from, opening);
-    // }
     //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
     //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
     //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
@@ -461,46 +369,48 @@ client.on('message', async (message) => {
       //CLEAR MESSAGES
       const chat = await client.getChatById(message.from);
       await chat.clearMessages();
-    } else if (messageReceived === 'warta' || messageReceived === '4') {
-      // try {
-      //REPLY PERTAMA
-      const replyWarta =
-        '[PESAN OTOMATIS]\nSilahkan pilih dokumen Warta Jemaat yang anda inginkan dengan cara membalas pesan ini dengan _katakunci_ atau _angka_:\n\n7. *_Immanuel_* = Untuk mendapatkan Warta Immanuel.\n8. *_Keuangan_* = Untuk mendapatkan Laporan Keuangan.\n9. *_Liturgi_* = Untuk mendapatkan daftar Pelayan, Bacaan, dan Nyanyian pekan ini dan pekan depan.';
-      await client.sendMessage(message.from, replyWarta);
-      // const buttons_reply_warta = new Buttons(
-      //   '[PESAN OTOMATIS]\n*Warta Jemaat*\nPilih dokumen warta yang anda inginkan.',
-      //   [
-      //     { body: 'Warta Immanuel', id: 'test-7' },
-      //     { body: 'Laporan Keuangan', id: 'test-8' },
-      //     { body: 'Pelayan, Bacaan & Nyanyian', id: 'test-9' },
-      //   ],
-      //   'Layanan Whatsapp GPIB Immanuel Malang',
-      //   'Silahkan tekan tombol di bawah'
-      // ); // Reply button
-      // await client.sendMessage(message.from, buttons_reply_warta);
-      // //CLEAR MESSAGES
-      // const chat = await client.getChatById(message.from);
-      // await chat.clearMessages();
-      // } catch (err) {
-      //   await client.sendMessage(message.from, replyError);
-      // }
-      // await client.sendMessage(message.from, replyLoading);
-      // try {
-      //   const warta = await Warta.find().sort({ createdAt: -1 });
-      //   if (warta.length === 0) {
-      //     await client.sendMessage(message.from, '*[PESAN OTOMATIS]*\nMohon maaf, Warta Jemaat belum ada.');
-      //   } else {
-      //     const dataString = warta[0].data.toString('base64');
-      //     const media = new MessageMedia(warta[0].dataType, dataString, warta[0].dataName);
-      //     await client.sendMessage(message.from, media);
-      //   }
-      // } catch (err) {
-      //   await client.sendMessage(message.from, replyError);
-      // }
-      //CLEAR MESSAGES
-      const chat = await client.getChatById(message.from);
-      await chat.clearMessages();
-    } else if (messageReceived === 'tata' || messageReceived === '5') {
+    }
+    // else if (messageReceived === 'warta' || messageReceived === '4') {
+    //   // try {
+    //   //REPLY PERTAMA
+    //   const replyWarta =
+    //     '[PESAN OTOMATIS]\nSilahkan pilih dokumen Warta Jemaat yang anda inginkan dengan cara membalas pesan ini dengan _katakunci_ atau _angka_:\n\n7. *_Immanuel_* = Untuk mendapatkan Warta Immanuel.\n8. *_Keuangan_* = Untuk mendapatkan Laporan Keuangan.\n9. *_Liturgi_* = Untuk mendapatkan daftar Pelayan, Bacaan, dan Nyanyian pekan ini dan pekan depan.';
+    //   await client.sendMessage(message.from, replyWarta);
+    //   // const buttons_reply_warta = new Buttons(
+    //   //   '[PESAN OTOMATIS]\n*Warta Jemaat*\nPilih dokumen warta yang anda inginkan.',
+    //   //   [
+    //   //     { body: 'Warta Immanuel', id: 'test-7' },
+    //   //     { body: 'Laporan Keuangan', id: 'test-8' },
+    //   //     { body: 'Pelayan, Bacaan & Nyanyian', id: 'test-9' },
+    //   //   ],
+    //   //   'Layanan Whatsapp GPIB Immanuel Malang',
+    //   //   'Silahkan tekan tombol di bawah'
+    //   // ); // Reply button
+    //   // await client.sendMessage(message.from, buttons_reply_warta);
+    //   // //CLEAR MESSAGES
+    //   // const chat = await client.getChatById(message.from);
+    //   // await chat.clearMessages();
+    //   // } catch (err) {
+    //   //   await client.sendMessage(message.from, replyError);
+    //   // }
+    //   // await client.sendMessage(message.from, replyLoading);
+    //   // try {
+    //   //   const warta = await Warta.find().sort({ createdAt: -1 });
+    //   //   if (warta.length === 0) {
+    //   //     await client.sendMessage(message.from, '*[PESAN OTOMATIS]*\nMohon maaf, Warta Jemaat belum ada.');
+    //   //   } else {
+    //   //     const dataString = warta[0].data.toString('base64');
+    //   //     const media = new MessageMedia(warta[0].dataType, dataString, warta[0].dataName);
+    //   //     await client.sendMessage(message.from, media);
+    //   //   }
+    //   // } catch (err) {
+    //   //   await client.sendMessage(message.from, replyError);
+    //   // }
+    //   //CLEAR MESSAGES
+    //   const chat = await client.getChatById(message.from);
+    //   await chat.clearMessages();
+    // }
+    else if (messageReceived === 'tata' || messageReceived === '4') {
       await client.sendMessage(message.from, replyLoading);
 
       // const date = new Date();
@@ -547,26 +457,28 @@ client.on('message', async (message) => {
       //CLEAR MESSAGES
       const chat = await client.getChatById(message.from);
       await chat.clearMessages();
-    } else if (messageReceived === 'jadwal' || messageReceived === '6') {
-      await client.sendMessage(message.from, replyLoading);
-      try {
-        //LIHAT JADWAL
-        const jadwal = await Jadwal.find().sort({ createdAt: -1 });
-        if (jadwal.length === 0) {
-          await client.sendMessage(message.from, '*[PESAN OTOMATIS]*\nMohon maaf, jadwal ibadah belum ada.');
-        } else {
-          // const dataString = jadwal[0].data.toString('base64');
-          const media = new MessageMedia(jadwal[0].dataType, jadwal[0].data);
-          await client.sendMessage(message.from, media);
-          await client.sendMessage(message.from, replyClosing);
-        }
-      } catch (err) {
-        await client.sendMessage(message.from, replyError);
-      }
-      // //CLEAR MESSAGES
-      // const chat = await client.getChatById(message.from);
-      // await chat.clearMessages();
-    } else if (messageReceived === 'mulai' || messageReceived === '1') {
+    }
+    // else if (messageReceived === 'jadwal' || messageReceived === '6') {
+    //   await client.sendMessage(message.from, replyLoading);
+    //   try {
+    //     //LIHAT JADWAL
+    //     const jadwal = await Jadwal.find().sort({ createdAt: -1 });
+    //     if (jadwal.length === 0) {
+    //       await client.sendMessage(message.from, '*[PESAN OTOMATIS]*\nMohon maaf, jadwal ibadah belum ada.');
+    //     } else {
+    //       // const dataString = jadwal[0].data.toString('base64');
+    //       const media = new MessageMedia(jadwal[0].dataType, jadwal[0].data);
+    //       await client.sendMessage(message.from, media);
+    //       await client.sendMessage(message.from, replyClosing);
+    //     }
+    //   } catch (err) {
+    //     await client.sendMessage(message.from, replyError);
+    //   }
+    //   // //CLEAR MESSAGES
+    //   // const chat = await client.getChatById(message.from);
+    //   // await chat.clearMessages();
+    // }
+    else if (messageReceived === 'mulai' || messageReceived === '1') {
       // if (!tanggalWarta) {
       //   tanggalWarta = 'DD/MM/YY';
       // }
@@ -576,7 +488,7 @@ client.on('message', async (message) => {
 
       //REPLY KEDUA
       const replyMulai =
-        '[PESAN OTOMATIS]\nSelamat Datang di Layanan Whatsapp\nGPIB Immanuel Malang.\n\nAnda bisa mendapatkan dokumen Warta Jemaat, Tata Ibadah Minggu dan Jadwal Ibadah Sepekan dengan cara membalas pesan ini dengan _katakunci_ atau _angka_:\n\n4. *_Warta_* = Untuk mendapatkan Warta Jemaat.\n5. *_Tata_* = Untuk mendapatkan Tata Ibadah.\n6. *_Jadwal_* = Untuk mendapatkan Jadwal Ibadah sepekan.';
+        '[PESAN OTOMATIS]\nSelamat Datang di Layanan Whatsapp\nGPIB Immanuel Malang.\n\nAnda bisa mendapatkan dokumen Tata Ibadah dan Warta Jemaat sepekan dengan cara membalas pesan ini dengan _katakunci_ atau _angka_:\n\n4. *_Tata_* = Untuk mendapatkan Tata Ibadah.\n5. *_Immanuel_* = Untuk mendapatkan Jadwal Ibadah, Jadwal Pelayan, Nyanyian, Narasi, dan lain-lain.\n6. *_Keuangan_* = Untuk mendapatkan Warta Keuangan.\n7. *_Ulangtahun_* = Untuk mendapatkan daftar Jemaat yang berulang tahun.';
 
       await client.sendMessage(message.from, replyMulai);
       // const buttons_reply_mulai = new Buttons(
@@ -593,7 +505,7 @@ client.on('message', async (message) => {
       //CLEAR MESSAGES
       const chat = await client.getChatById(message.from);
       await chat.clearMessages();
-    } else if (messageReceived === 'immanuel' || messageReceived === 'imanuel' || messageReceived === '7') {
+    } else if (messageReceived === 'immanuel' || messageReceived === 'imanuel' || messageReceived === '5') {
       await client.sendMessage(message.from, replyLoading);
       try {
         const immanuel = await Immanuel.find().sort({ createdAt: -1 });
@@ -611,7 +523,7 @@ client.on('message', async (message) => {
       //CLEAR MESSAGES
       const chat = await client.getChatById(message.from);
       await chat.clearMessages();
-    } else if (messageReceived === 'keuangan' || messageReceived === '8') {
+    } else if (messageReceived === 'keuangan' || messageReceived === '6') {
       await client.sendMessage(message.from, replyLoading);
       try {
         const keuangan = await Keuangan.find().sort({ createdAt: -1 });
@@ -629,15 +541,15 @@ client.on('message', async (message) => {
       //CLEAR MESSAGES
       const chat = await client.getChatById(message.from);
       await chat.clearMessages();
-    } else if (messageReceived === 'liturgi' || messageReceived === '9') {
+    } else if (messageReceived === 'ulangtahun' || messageReceived === '7' || messageReceived === 'ulang tahun') {
       await client.sendMessage(message.from, replyLoading);
       try {
-        const teologi = await Teologi.find().sort({ createdAt: -1 });
-        if (teologi.length === 0) {
-          await client.sendMessage(message.from, '*[PESAN OTOMATIS]*\nMohon maaf, dokumen Pelayan, Bacaan & Nyanyian belum ada.');
+        const ulang = await Ulang.find().sort({ createdAt: -1 });
+        if (ulang.length === 0) {
+          await client.sendMessage(message.from, '*[PESAN OTOMATIS]*\nMohon maaf, dokumen belum ada.');
         } else {
-          // const dataString = teologi[0].data.toString('base64');
-          const media = new MessageMedia(teologi[0].dataType, teologi[0].data, teologi[0].dataName);
+          // const dataString = ulang[0].data.toString('base64');
+          const media = new MessageMedia(ulang[0].dataType, ulang[0].data);
           await client.sendMessage(message.from, media);
           await client.sendMessage(message.from, replyClosing);
         }
@@ -668,77 +580,43 @@ client.on('message', async (message) => {
       const chat = await client.getChatById(message.from);
       await chat.clearMessages();
     }
-    //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-    //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-    //------------------ OLD CODE -----------------
-    // await client.sendMessage(message.from, 'SELAMAT DATANG di \n*Layanan Whatsapp*\n*_GPIB Immanuel Malang_*\n\nLayanan ini akan mulai beroperasi tanggal *22 Oktober 2022.*\n\nTuhan Yesus memberkati.');
-    // await client.sendMessage(message.from, button);
-    // //FIND NEWEST WARTA & TATA
-    // const warta = await Warta.find().sort({ createdAt: -1 });
-    // const wartaNameArr = warta[0].dataName.split('');
-    // let wartaDateArr = [];
-    // for (let i = 13; i < 21; i++) {
-    //   wartaDateArr.push(wartaNameArr[i]);
-    // }
-    // const wartaDate = wartaDateArr.join('');
-    // // console.log(wartaDate);
-    // const tata = await Tata.find().sort({ createdAt: -1 });
-    // const tataNameArr = tata[0].dataName.split('');
-    // let tataDateArr = [];
-    // for (let i = 12; i < 20; i++) {
-    //   tataDateArr.push(tataNameArr[i]);
-    // }
-    // const tataDate = tataDateArr.join('');
-    // // console.log(tataDate);
-    // // console.log(warta);
-    //  // REPLY KEDUA
-    // const buttons_reply_lainlain = new Buttons('GPIB Immanuel Malang juga dapat memberi anda dokumen-dokumen lainnya, seperti:', [
-    //   { body: 'Litbang', id: 'test-4' },
-    //   { body: 'Info', id: 'test-5' },
-    //   { body: 'Merchandise', id: 'test-6' },
-    // ]); // Reply button
-    // //OPENING
-    // const buttons_reply_mulai = new Buttons('Layanan ini sudah berakhir atau belum dimulai.', [{ body: 'Mulai', id: 'test-4' }], 'Layanan Whatsapp GPIB Immanuel Malang', 'Silahkan tekan tombol di bawah untuk memulai.'); // Reply button
-    // const buttons_reply_kembali = new Buttons('Butuh dokumen lainnya?', [{ body: 'Kembali ke menu utama', id: 'test-5' }]); // Reply button
-    // // const media = MessageMedia.fromFilePath('./public/pdf/warta_jemaat_minggu_tanggal.pdf');
-    // ------------------------------------------------
   }
 });
 
-async function updateTanggalWartaTata() {
-  //FIND NEWEST WARTA
-  const warta = await Warta.find().sort({ createdAt: -1 });
-  if (warta.length === 0) {
-    tanggalWarta = 'Belum ada';
-  } else {
-    const wartaNameArr = warta[0].dataName.split('');
-    let wartaDateArr = [];
-    for (let i = 13; i < 21; i++) {
-      wartaDateArr.push(wartaNameArr[i]);
-    }
-    const wartaDate = wartaDateArr.join('');
-    // console.log(wartaDate);
-    tanggalWarta = wartaDate;
-  }
+// async function updateTanggalWartaTata() {
+//   //FIND NEWEST WARTA
+//   const warta = await Warta.find().sort({ createdAt: -1 });
+//   if (warta.length === 0) {
+//     tanggalWarta = 'Belum ada';
+//   } else {
+//     const wartaNameArr = warta[0].dataName.split('');
+//     let wartaDateArr = [];
+//     for (let i = 13; i < 21; i++) {
+//       wartaDateArr.push(wartaNameArr[i]);
+//     }
+//     const wartaDate = wartaDateArr.join('');
+//     // console.log(wartaDate);
+//     tanggalWarta = wartaDate;
+//   }
 
-  //FIND NEWEST TATA
-  const tata = await Tata.find().sort({ createdAt: -1 });
-  if (tata.length < 2) {
-    tanggalTata = 'Belum ada';
-  } else {
-    const tataNameArr = tata[0].dataName.split('');
-    let tataDateArr = [];
-    for (let i = 14; i < 22; i++) {
-      tataDateArr.push(tataNameArr[i]);
-    }
-    const tataDate = tataDateArr.join('');
-    // console.log(tataDate);
-    tanggalTata = tataDate;
-  }
-  // tanggalWarta = wartaDate;
-}
+//   //FIND NEWEST TATA
+//   const tata = await Tata.find().sort({ createdAt: -1 });
+//   if (tata.length < 2) {
+//     tanggalTata = 'Belum ada';
+//   } else {
+//     const tataNameArr = tata[0].dataName.split('');
+//     let tataDateArr = [];
+//     for (let i = 14; i < 22; i++) {
+//       tataDateArr.push(tataNameArr[i]);
+//     }
+//     const tataDate = tataDateArr.join('');
+//     // console.log(tataDate);
+//     tanggalTata = tataDate;
+//   }
+//   // tanggalWarta = wartaDate;
+// }
 
-updateTanggalWartaTata();
+// updateTanggalWartaTata();
 
 //LISTEN
 app.listen(port, () => {
