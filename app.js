@@ -108,8 +108,8 @@ client.on('message', async (message) => {
   const replyClosing = '[PESAN OTOMATIS]\nTerima kasih telah mengunduh.';
   const invalidExt = '[PESAN OTOMATIS]\nFormat dokumen Salah.';
   const fileOversize = '[PESAN OTOMATIS]\nUpload File GAGAL. Ukuran File maksimal 1,5mb.';
-  const danielNumber = '6285172160302@c.us';
-  if (message.from === process.env.ADMIN_NUMBER || message.from === process.env.MANAGER_NUMBER || message.from === danielNumber) {
+  // const danielNumber = '6285172160302@c.us';
+  if (message.from === process.env.ADMIN_NUMBER || message.from === process.env.MANAGER_NUMBER) {
     if (message.hasMedia) {
       const mediaReceived = await message.downloadMedia();
       if (mediaReceived.filename === undefined) {
