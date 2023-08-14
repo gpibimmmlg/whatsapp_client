@@ -18,13 +18,13 @@ const { adminLogger, publicLogger } = require('./config/logger/childLogger');
 
 //IMPORT MONGOOSE MODELS
 const Tata = require('./models/Tata');
-const Warta = require('./models/Warta');
-const Jadwal = require('./models/Jadwal');
+// const Warta = require('./models/Warta');
+// const Jadwal = require('./models/Jadwal');
 const Subs = require('./models/Subs');
 const Teks = require('./models/Teks');
 const Immanuel = require('./models/Immanuel');
-const Keuangan = require('./models/Keuangan');
-const Ulang = require('./models/Teologi');
+// const Keuangan = require('./models/Keuangan');
+// const Ulang = require('./models/Teologi');
 const { infoLog } = require('./config/logger/functions');
 
 const client = new Client({
@@ -107,15 +107,22 @@ client.on('message', async (message) => {
   const replyLoading = '[PESAN OTOMATIS]\nMohon tunggu...';
   const replyClosing = '[PESAN OTOMATIS]\nTerima kasih telah mengunduh.';
   const invalidExt = '[PESAN OTOMATIS]\nFormat dokumen Salah.';
-  if (message.from === process.env.ADMIN_NUMBER || message.from === process.env.MANAGER_NUMBER) {
+  const fileOversize = '[PESAN OTOMATIS]\nUpload File GAGAL. Ukuran File maksimal 1,5mb.';
+  const danielNumber = '6285172160302@c.us';
+  if (message.from === process.env.ADMIN_NUMBER || message.from === process.env.MANAGER_NUMBER || message.from === danielNumber) {
     if (message.hasMedia) {
       const mediaReceived = await message.downloadMedia();
       if (mediaReceived.filename === undefined) {
         mediaReceived.filename = 'undefined';
       }
       if (mediaReceived.filename.indexOf('1_tata_ibadah') === 0 || mediaReceived.filename.indexOf('2_tata_ibadah') === 0) {
+        if (mediaReceived.filesize >= 1500000) return await client.sendMessage(message.from, fileOversize);
         await client.sendMessage(message.from, replyLoading);
         try {
+          //DELETE THE OLDEST DATA
+          const tatas = await Tata.find().sort({ createdAt: 1 });
+          await Tata.deleteOne({ dataName: tatas[0] });
+
           // const dataBuf = Buffer.from(mediaReceived.data, 'base64');
           //SIMPAN TATA IBADAH KE DB
           const newTata = new Tata({ dataType: mediaReceived.mimetype, data: mediaReceived.data, dataName: mediaReceived.filename });
@@ -126,9 +133,14 @@ client.on('message', async (message) => {
         } catch (err) {
           await client.sendMessage(message.from, replyError);
         }
-      } else if (mediaReceived.filename.indexOf('warta_immanuel') === 0) {
+      } else if (mediaReceived.filename.indexOf('warta_immanuel') === 0 || mediaReceived.filename.indexOf('.pdf') === 23) {
+        if (mediaReceived.filesize >= 1500000) return await client.sendMessage(message.from, fileOversize);
+
         await client.sendMessage(message.from, replyLoading);
         try {
+          //HAPUS DOKUMEN DI DB
+          await Immanuel.deleteMany({ dataType: 'application/pdf' });
+
           // const dataBuf = Buffer.from(mediaReceived.data, 'base64');
           //SIMPAN WARTA JEMAAT KE DB
           const newImm = new Immanuel({ dataType: mediaReceived.mimetype, data: mediaReceived.data, dataName: mediaReceived.filename });
