@@ -120,8 +120,8 @@ client.on('message', async (message) => {
         await client.sendMessage(message.from, replyLoading);
         try {
           //DELETE THE OLDEST DATA
-          const tatas = await Tata.find().sort({ createdAt: 1 });
-          await Tata.deleteOne({ dataName: tatas[0] });
+          // const tatas = await Tata.find().sort({ createdAt: 1 });
+          // await Tata.deleteOne({ dataName: tatas[0] });
 
           // const dataBuf = Buffer.from(mediaReceived.data, 'base64');
           //SIMPAN TATA IBADAH KE DB
@@ -139,7 +139,7 @@ client.on('message', async (message) => {
         await client.sendMessage(message.from, replyLoading);
         try {
           //HAPUS DOKUMEN DI DB
-          await Immanuel.deleteMany({ dataType: 'application/pdf' });
+          // await Immanuel.deleteMany({ dataType: 'application/pdf' });
 
           // const dataBuf = Buffer.from(mediaReceived.data, 'base64');
           //SIMPAN WARTA JEMAAT KE DB
